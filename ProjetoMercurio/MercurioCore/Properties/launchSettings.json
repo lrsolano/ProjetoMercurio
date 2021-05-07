@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MercurioCore": {
+      "commandName": "Project"
+    },
+    "Teste": {
+      "commandName": "Executable",
+      "executablePath": "C:\\_Projetos\\ProjetoMercurio\\ProjetoMercurio\\ProjetoMercurio\\ApplicationTest\\bin\\Debug\\netcoreapp3.1\\ApplicationTest.exe",
+      "nativeDebugging": true
+    }
+  }
+}
