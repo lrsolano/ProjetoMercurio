@@ -97,35 +97,44 @@ namespace MercurioCore.db.DataManipulation
 
         public T FindByID(long id)
         {
-            string sql = string.Format(@"SELECT IdPedinte, DataPedido, IdItem, IdPedidoxItem
+            List<Item> itens = new List<Item>();
+            Pedinte pedinte = null;
+            DateTime dataPedido = new DateTime();
+            string sql = string.Format(@"SELECT IdPedinte, DataPedido
                                         FROM projetomercurio.pedido p
-                                        INNER JOIN projetomercurio.pedidoxitem r ON p.IdPedido = r.IdPedido
                                         WHERE p.IdPedido={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
                 result.Read();
-                Pedinte pedinte = new Pedinte((int)result["IdPedinte"]);
-                DateTime dataPedido = (DateTime)result["DataPedido"];
-                List<Item> itens = new List<Item>();
-                Item item1 = new Item((int)result["IdItem"]);
-                item1.IdPedidoXItem = (int)result["IdPedidoxItem"];
-                itens.Add(item1);
-                while (result.Read())
-                {
-                    Item item2 = new Item((int)result["IdItem"]);
-                    item2.IdPedidoXItem = (int)result["IdPedidoxItem"];
-                    itens.Add(item2);
-                }
+                pedinte = new Pedinte((int)result["IdPedinte"]);
+                dataPedido = (DateTime)result["DataPedido"];
                 result.Close();
-                Pedido pedido = new Pedido((int)id, pedinte, itens, dataPedido);
-                result.Close();
-                return (T)pedido;
+
             }
             else
             {
                 throw new DBConnectionException("Nenhum registro encontrado");
             }
+
+            sql = string.Format("SELECT IdItem, IdPedidoxItem FROM projetomercurio.pedidoxitem WHERE IdPedido = {0}", id);
+
+            MySqlDataReader result2 = connection.SendQuery(sql);
+
+            if (result2.HasRows)
+            {
+                while (result2.Read())
+                {
+                    Item item2 = new Item((int)result2["IdItem"]);
+                    item2.IdPedidoXItem = (int)result2["IdPedidoxItem"];
+                    itens.Add(item2);
+                }
+            }           
+            result2.Close();
+            Pedido pedido = new Pedido((int)id, pedinte, itens, dataPedido);
+            return (T)pedido;
+            
+            
         }
 
         public T Update(T item)

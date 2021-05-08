@@ -16,7 +16,7 @@ namespace ApplicationTest
             try
             {
 
-                /*Pedinte matheus = new Pedinte(26, "Matheus Boldrini");
+                Pedinte matheus = new Pedinte(26, "Matheus Boldrini");
                 matheus.CreatePedinte();
 
                 Item teclado = new Item("Teclado", "Eletronico", 1);
@@ -32,11 +32,11 @@ namespace ApplicationTest
 
                 Pedido pedido = new Pedido(matheus, items);
 
-                pedido.CreatePedido();*/
+                pedido.CreatePedido();
 
 
-                Pedido pedido = new Pedido(5);
-                pedido.DeletePedido();
+                //Pedido pedido = new Pedido(5);
+                //pedido.DeletePedido();
                 
 
 
