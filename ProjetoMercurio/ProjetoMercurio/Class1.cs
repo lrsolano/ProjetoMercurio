@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProjetoMercurio
+namespace ProjetoMercurioCore
 {
     public class Class1
     {

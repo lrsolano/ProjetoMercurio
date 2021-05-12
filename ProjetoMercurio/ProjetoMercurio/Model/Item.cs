@@ -1,10 +1,10 @@
 ﻿using MercurioCore.Model.Exceptions;
-using ProjetoMercurio.db.DataManipulation;
+using ProjetoMercurioCore.db.DataManipulation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.Model
+namespace ProjetoMercurioCore.Model
 {
     public class Item
     {

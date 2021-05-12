@@ -2,12 +2,12 @@
 using MercurioCore.Model.Exceptions;
 using MercurioCore.Model.Interfaces;
 using MySqlConnector;
-using ProjetoMercurio.Model;
+using ProjetoMercurioCore.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.db.DataManipulation
+namespace ProjetoMercurioCore.db.DataManipulation
 {
     class DirecaoManipulation<T> : IRepository<T> where T : Direcao
     {

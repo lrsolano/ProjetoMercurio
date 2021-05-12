@@ -2,13 +2,13 @@
 using MercurioCore.Model.Exceptions;
 using MercurioCore.Model.Interfaces;
 using MySqlConnector;
-using ProjetoMercurio.Model;
-using ProjetoMercurio.Model.Enum;
+using ProjetoMercurioCore.Model;
+using ProjetoMercurioCore.Model.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.db.DataManipulation
+namespace ProjetoMercurioCore.db.DataManipulation
 {
     class SensorManipulation<T> : IRepository<T> where T : Sensor
     {

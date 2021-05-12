@@ -1,11 +1,11 @@
 ﻿using MercurioCore.db;
 using MercurioCore.Model.Interfaces;
-using ProjetoMercurio.Model;
+using ProjetoMercurioCore.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.db.DataManipulation
+namespace ProjetoMercurioCore.db.DataManipulation
 {
     class LocalManipulation<T> : IRepository<T> where T : Local
     {

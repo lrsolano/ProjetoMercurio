@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.Model.Enum
+namespace ProjetoMercurioCore.Model.Enum
 {
     public enum DirecaoRota
     {

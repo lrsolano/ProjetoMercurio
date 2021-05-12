@@ -1,9 +1,9 @@
-﻿using ProjetoMercurio.Model.Enum;
+﻿using ProjetoMercurioCore.Model.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoMercurio.Model
+namespace ProjetoMercurioCore.Model
 {
     public class Sensor
     {
