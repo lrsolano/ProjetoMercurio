@@ -18,6 +18,7 @@ namespace ProjetoMercurioCore.Model
         public Direcao(int id)
         {
             DirecaoManipulation<Direcao> item = new DirecaoManipulation<Direcao>();
+
             Direcao i = item.FindByID(id);
             Id = id;
             Movimento = i.Movimento;
