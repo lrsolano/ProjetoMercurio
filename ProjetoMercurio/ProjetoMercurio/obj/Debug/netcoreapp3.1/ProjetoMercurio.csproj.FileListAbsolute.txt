@@ -1,0 +1,9 @@
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\bin\Debug\netcoreapp3.1\ProjetoMercurio.deps.json
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\bin\Debug\netcoreapp3.1\ProjetoMercurio.dll
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\bin\Debug\netcoreapp3.1\ProjetoMercurio.pdb
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.csprojAssemblyReference.cache
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.AssemblyInfoInputs.cache
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.AssemblyInfo.cs
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.csproj.CoreCompileInputs.cache
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.dll
+C:\_Projetos\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\ProjetoMercurio\obj\Debug\netcoreapp3.1\ProjetoMercurio.pdb
