@@ -19,27 +19,77 @@ namespace ProjetoMercurio.db.DataManipulation
         }
         public T Create(T item)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("INSERT INTO projetomercurio.item (Nome, DataCriacao) VALUES ('{0}', NOW())", item.Nome);
+
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
+
+            return FindLastId();
         }
 
         public void Delete(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("DELETE FROM projetomercurio.item WHERE IdItem={0}", id);
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
         }
 
         public bool Exists(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("SELECT IdItem FROM  projetomercurio.item WHERE IdItem={0} ", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public List<T> FindAll()
         {
-            throw new NotImplementedException();
+            List<T> items = new List<T>();
+            string sql = string.Format("SELECT IdItem, Nome, DataCriacao FROM projetomercurio.item");
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    Item item = new Item((int)result["IdItem"], result["Nome"].ToString(), (DateTime)result["DataCriacao"]);
+                    items.Add((T)item);
+                }
+                result.Close();
+
+                return (items);
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum registro encontrado");
+            }
         }
 
         public T FindByID(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("SELECT IdItem, Nome, DataCriacao FROM  projetomercurio.item WHERE IdItem={0} ", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Item item = new Item((int)result["IdItem"], result["Nome"].ToString(), (DateTime)result["DataCriacao"]);
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum registro encontrado");
+            }
         }
 
         public T FindLastId()
@@ -61,7 +111,14 @@ namespace ProjetoMercurio.db.DataManipulation
 
         public T Update(T item)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("UPDATE projetomercurio.item SET  Nome = '{1}' WHERE IdItem = {1}",item.Nome, item.Id);
+
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
+
+            return FindByID(item.Id);
         }
     }
 }
