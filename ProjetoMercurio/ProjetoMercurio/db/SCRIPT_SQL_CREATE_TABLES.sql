@@ -14,7 +14,7 @@ CREATE TABLE sensor (
 	Nome VARCHAR(100) NOT NULL,
 	DataCriacao DATETIME NOT NULL,
 	Inicial  BOOLEAN NOT NULL DEFAULT false,
-	IdSensorAnterior INT NOT NULL,
+	IdSensorAnterior INT,
 	IdDirecao INT NOT NULL,
 	DirecaoRota ENUM('Ida','Volta'),
 	FOREIGN KEY (IdSensorAnterior) REFERENCES sensor(IdSensor),
@@ -42,12 +42,23 @@ CREATE TABLE usuario(
 	Idade INT NOT NULL
 );
 
+CREATE TABLE rota(
+	IdRota INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	IdLocalInicial INT NOT NULL,
+	IdLocalFinal INT NOT NULL,
+	Rota VARCHAR(100),
+	FOREIGN KEY (IdLocalInicial) REFERENCES local(IdLocal),
+	FOREIGN KEY (IdLocalFinal) REFERENCES local(IdLocal)
+
+);
+
 CREATE TABLE pedido(
 	IdPedido INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	IdUsuario INT NOT NULL,
 	DataCriacao DATETIME NOT NULL,
-	Rota VARCHAR(100),
-	FOREIGN KEY (IdUsuario) REFERENCES usuario(IdUsuario)
+	IdRota INT NOT NULL,
+	FOREIGN KEY (IdUsuario) REFERENCES usuario(IdUsuario),
+	FOREIGN KEY (IdRota) REFERENCES rota(IdRota)
 );
 
 CREATE TABLE PedidoXItem(
@@ -59,5 +70,6 @@ CREATE TABLE PedidoXItem(
 	FOREIGN KEY (IdItem) REFERENCES item(IdItem)
 );
 
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('Primeiro',now(),true,1,'Ida');
 
 	
