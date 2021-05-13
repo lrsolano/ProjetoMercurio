@@ -20,22 +20,73 @@ namespace ProjetoMercurioCore.db.DataManipulation
         }
         public T Create(T item)
         {
-            throw new NotImplementedException();
+            string direcaoRota = string.Empty;
+
+            switch (item.DirecaoRota)
+            {
+                case DirecaoRota.Ida:
+                    direcaoRota = "Ida";
+                    break;
+                case DirecaoRota.Volta:
+                    direcaoRota = "Volta";
+                    break;
+
+            }
+
+            string sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('{0}',now(),{1},{2},'{3}');", item.Nome,item.Inicial,item.Direcao.Id,direcaoRota);
+
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
+
+            return FindLastId();
         }
 
         public void Delete(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("DELETE FROM projetomercurio.sensor WHERE IdSensor={0}", id);
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
         }
 
         public bool Exists(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public List<T> FindAll()
         {
-            throw new NotImplementedException();
+            List<T> items = new List<T>();
+            string sql = string.Format("SELECT IdSensor FROM projetomercurio.sensor");
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    Sensor sensor = new Sensor((int)result["IdSensor"]);
+                    items.Add((T)sensor);
+                }
+                result.Close();
+
+                return (items);
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum registro encontrado");
+            }
         }
 
         public T FindByID(long id)
@@ -52,7 +103,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 }
                 else
                 {
-                    sensor = FindByID((idAnterior));
+                    sensor = new Sensor((int)result["IdSensorAnterior"]);
                 }
 
                 Direcao direcao = new Direcao((int)result["IdDirecao"]);
@@ -81,12 +132,43 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
         public T FindLastId()
         {
-            throw new NotImplementedException();
+            string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor order by IdItem desc limit 1 ");
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Sensor item = new Sensor((int)result["IdSensor"]);
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum registro encontrado");
+            }
         }
 
         public T Update(T item)
         {
-            throw new NotImplementedException();
+            string direcaoRota = string.Empty;
+            switch (item.DirecaoRota)
+            {
+                case DirecaoRota.Ida:
+                    direcaoRota = "Ida";
+                    break;
+                case DirecaoRota.Volta:
+                    direcaoRota = "Volta";
+                    break;
+
+            }
+
+            string sql = string.Format("UPDATE projetomercurio.sensor SET  Nome = '{0}', Inicial = {1}, IdDirecao = {2}, DirecaoRota = '{3}'WHERE IdItem = {4}", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
+
+            if (!connection.SendCommand(sql))
+            {
+                throw new DBConnectionException("Erro ao inserir item no banco.");
+            }
+
+            return FindByID(item.Id);
         }
     }
 }

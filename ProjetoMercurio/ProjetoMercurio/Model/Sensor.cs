@@ -1,4 +1,6 @@
-﻿using ProjetoMercurioCore.Model.Enum;
+﻿using MercurioCore.Model.Exceptions;
+using ProjetoMercurioCore.db.DataManipulation;
+using ProjetoMercurioCore.Model.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,6 +35,57 @@ namespace ProjetoMercurioCore.Model
             SensorAnterior = sensorAnterior;
             Direcao = direcao;
             DirecaoRota = direcaoRota;
+        }
+
+        public Sensor(int id)
+        {
+            SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
+            Sensor i = manipulation.FindByID(id);
+            Id = i.Id;
+            Nome = i.Nome;
+            DataCriacao = i.DataCriacao;
+            Inicial = i.Inicial;
+            SensorAnterior = i.SensorAnterior;
+            Direcao = i.Direcao;
+            DirecaoRota = i.DirecaoRota;
+        }
+
+        public void ChangeType(int id)
+        {
+            SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
+            Sensor i = manipulation.FindByID(id);
+            Id = i.Id;
+            Nome = i.Nome;
+            DataCriacao = i.DataCriacao;
+            Inicial = i.Inicial;
+            SensorAnterior = i.SensorAnterior;
+            Direcao = i.Direcao;
+            DirecaoRota = i.DirecaoRota;
+        }
+        public void CreateSensor()
+        {
+            if (Id != 0)
+            {
+                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+            }
+            SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
+
+            Sensor novo = item.Create(this);
+
+            Id = novo.Id;
+        }
+        public void UpdateSensor()
+        {
+            SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
+
+            item.Update(this);
+
+        }
+        public void DeleteSensor()
+        {
+            SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
+
+            item.Delete(this.Id);
         }
     }
 }

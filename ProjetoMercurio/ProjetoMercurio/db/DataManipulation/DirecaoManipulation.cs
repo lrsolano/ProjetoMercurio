@@ -29,7 +29,17 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
         public bool Exists(long id)
         {
-            throw new NotImplementedException();
+            string sql = string.Format("SELECT IdDirecao FROM  projetomercurio.direcao WHERE IdDirecao={0} ", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Close();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public List<T> FindAll()
