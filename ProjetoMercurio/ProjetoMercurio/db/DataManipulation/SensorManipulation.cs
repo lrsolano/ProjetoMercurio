@@ -32,8 +32,16 @@ namespace ProjetoMercurioCore.db.DataManipulation
                     break;
 
             }
-
-            string sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('{0}',now(),{1},{2},'{3}');", item.Nome,item.Inicial,item.Direcao.Id,direcaoRota);
+            string sql = string.Empty;
+            if(item.SensorAnterior == null)
+            {
+                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('{0}',now(),{1},{2},'{3}');", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
+            }
+            else
+            {
+                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('{0}',now(),{1},{2},'{3}',{4});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota, item.SensorAnterior.Id);
+            }
+            
 
             if (!connection.SendCommand(sql))
             {
@@ -95,6 +103,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
+                result.Read();
                 Sensor sensor;
                 int idAnterior = 0;
                 if(!Int32.TryParse(result["IdSensorAnterior"].ToString(),out idAnterior))
@@ -118,7 +127,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
                         break;
 
                 }
-                result.Read();
+                
                 Sensor item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"],sensor,direcao,rota);
                 result.Close();
                 return (T)item;
@@ -132,7 +141,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
         public T FindLastId()
         {
-            string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor order by IdItem desc limit 1 ");
+            string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor order by IdSensor desc limit 1 ");
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {

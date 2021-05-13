@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ProjetoMercurioCore.db.DataManipulation
 {
-    public class ItemManipulation<T> : IRepository<T> where T : Item
+    class ItemManipulation<T> : IRepository<T> where T : Item
     {
         private DBConnection connection;
 

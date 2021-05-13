@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ProjetoMercurio": {
+      "commandName": "Project"
+    },
+    "TestCore": {
+      "commandName": "Executable",
+      "executablePath": "C:\\_Projetos\\ProjetoMercurio\\ProjetoMercurio\\ProjetoMercurio\\TestCore\\bin\\Debug\\net5.0\\TestCore.exe"
+    }
+  }
+}

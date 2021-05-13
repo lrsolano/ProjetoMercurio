@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoMercurio", "ProjetoMercurio\ProjetoMercurio.csproj", "{EEF3FF6F-A356-4FB8-AF08-6753E15952EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoMercurio", "ProjetoMercurio\ProjetoMercurio.csproj", "{EEF3FF6F-A356-4FB8-AF08-6753E15952EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCore", "TestCore\TestCore.csproj", "{B00EE0D9-0B1E-4B7A-85E2-AE12B7D8C544}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EEF3FF6F-A356-4FB8-AF08-6753E15952EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF3FF6F-A356-4FB8-AF08-6753E15952EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEF3FF6F-A356-4FB8-AF08-6753E15952EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00EE0D9-0B1E-4B7A-85E2-AE12B7D8C544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00EE0D9-0B1E-4B7A-85E2-AE12B7D8C544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00EE0D9-0B1E-4B7A-85E2-AE12B7D8C544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00EE0D9-0B1E-4B7A-85E2-AE12B7D8C544}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
