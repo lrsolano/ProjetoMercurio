@@ -51,7 +51,7 @@ namespace MercurioCore.db
 			try
 			{
 				connection.Open();
-				Console.WriteLine("Conectou");
+				//Console.WriteLine("Conectou");
 				return true;
 			}
 			catch (MySqlException ex)

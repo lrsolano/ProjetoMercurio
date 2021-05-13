@@ -66,7 +66,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
         public T FindByID(long id)
         {
-            string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE IdItem={0} ", id);
+            string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE IdDirecao={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
