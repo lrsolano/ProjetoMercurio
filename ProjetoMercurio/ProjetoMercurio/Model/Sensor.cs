@@ -87,5 +87,28 @@ namespace ProjetoMercurioCore.Model
 
             item.Delete(this.Id);
         }
+
+        public static List<Sensor> FindAll()
+        {
+            SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
+            return manipulation.FindAll();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as Sensor;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Id.Equals(item.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

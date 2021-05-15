@@ -1,3 +1,4 @@
+CREATE SCHEMA `projetomercurio` ;
 USE projetomercurio;
 
 CREATE TABLE direcao(
@@ -44,11 +45,11 @@ CREATE TABLE usuario(
 
 CREATE TABLE rota(
 	IdRota INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	IdLocalInicial INT NOT NULL,
-	IdLocalFinal INT NOT NULL,
+	IdSensorInicial INT NOT NULL,
+	IdSensorFinal INT NOT NULL,
 	Rota VARCHAR(100),
-	FOREIGN KEY (IdLocalInicial) REFERENCES local(IdLocal),
-	FOREIGN KEY (IdLocalFinal) REFERENCES local(IdLocal)
+	FOREIGN KEY (IdSensorInicial) REFERENCES sensor(IdSensor),
+	FOREIGN KEY (IdSensorFinal) REFERENCES sensor(IdSensor)
 
 );
 
@@ -70,6 +71,10 @@ CREATE TABLE PedidoXItem(
 	FOREIGN KEY (IdItem) REFERENCES item(IdItem)
 );
 
-INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('Primeiro',now(),true,1,'Ida');
-
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('Sensor 1',now(),true,1,'Ida');
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 2',now(),false,1,'Ida',1);
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 3',now(),false,3,'Ida',2);
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 4',now(),false,3,'Ida',3);
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 5',now(),false,2,'Ida',3);
+INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 6',now(),false,1,'Ida',3);
 	
