@@ -16,7 +16,6 @@ namespace ProjetoMercurioCore.Model
         public Sensor SensorAnterior { get; set; }
         public Direcao Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; private set; }
-
         public Sensor(int id, string nome, DateTime dataCriacao, bool inicial, Sensor sensorAnterior, Direcao direcao, DirecaoRota direcaoRota)
         {
             Id = id;
@@ -27,7 +26,6 @@ namespace ProjetoMercurioCore.Model
             Direcao = direcao;
             DirecaoRota = direcaoRota;
         }
-
         public Sensor(string nome, bool inicial, Sensor sensorAnterior, Direcao direcao, DirecaoRota direcaoRota)
         {
             Nome = nome;
@@ -36,7 +34,6 @@ namespace ProjetoMercurioCore.Model
             Direcao = direcao;
             DirecaoRota = direcaoRota;
         }
-
         public Sensor(int id)
         {
             SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
@@ -49,7 +46,6 @@ namespace ProjetoMercurioCore.Model
             Direcao = i.Direcao;
             DirecaoRota = i.DirecaoRota;
         }
-
         public void ChangeType(int id)
         {
             SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
@@ -87,13 +83,11 @@ namespace ProjetoMercurioCore.Model
 
             item.Delete(this.Id);
         }
-
         public static List<Sensor> FindAll()
         {
             SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
             return manipulation.FindAll();
         }
-
         public override bool Equals(object obj)
         {
             var item = obj as Sensor;
@@ -105,7 +99,6 @@ namespace ProjetoMercurioCore.Model
 
             return this.Id.Equals(item.Id);
         }
-
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();

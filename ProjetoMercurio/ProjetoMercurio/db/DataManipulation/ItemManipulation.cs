@@ -28,7 +28,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             return FindLastId();
         }
-
         public void Delete(long id)
         {
             string sql = string.Format("DELETE FROM projetomercurio.item WHERE IdItem={0}", id);
@@ -37,7 +36,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 throw new DBConnectionException("Erro ao inserir item no banco.");
             }
         }
-
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT IdItem FROM  projetomercurio.item WHERE IdItem={0} ", id);
@@ -52,7 +50,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 return false;
             }
         }
-
         public List<T> FindAll()
         {
             List<T> items = new List<T>();
@@ -74,7 +71,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 throw new DBConnectionException("Nenhum registro encontrado");
             }
         }
-
         public T FindByID(long id)
         {
             string sql = string.Format("SELECT IdItem, Nome, DataCriacao FROM  projetomercurio.item WHERE IdItem={0} ", id);
@@ -91,7 +87,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 throw new DBConnectionException("Nenhum registro encontrado");
             }
         }
-
         public T FindLastId()
         {
             string sql = string.Format("SELECT IdItem, Nome, DataCriacao FROM projetomercurio.item order by IdItem desc limit 1 ");
@@ -108,7 +103,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 throw new DBConnectionException("Nenhum registro encontrado");
             }
         }
-
         public T Update(T item)
         {
             string sql = string.Format("UPDATE projetomercurio.item SET  Nome = '{1}' WHERE IdItem = {0}",item.Nome, item.Id);

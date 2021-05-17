@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MercurioCore.Model.Exceptions;
+using ProjetoMercurioCore.db.DataManipulation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,6 +23,45 @@ namespace ProjetoMercurioCore.Model
         {
             Nome = nome;
             Idade = idade;
+        }
+        public Usuario(int id)
+        {
+            Id = id;
+        }
+
+        public void CreateUsuario()
+        {
+            if (Id != 0)
+            {
+                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+            }
+            UsuarioManipulation<Usuario> item = new UsuarioManipulation<Usuario>();
+
+            Usuario novo = item.Create(this);
+
+            Id = novo.Id;
+        }
+        public void UpdateUsuario()
+        {
+            UsuarioManipulation<Usuario> item = new UsuarioManipulation<Usuario>();
+
+            item.Update(this);
+
+        }
+        public void DeleteUsuario()
+        {
+            UsuarioManipulation<Usuario> item = new UsuarioManipulation<Usuario>();
+
+            item.Delete(this.Id);
+        }
+        public void ChangeUsuario(int id)
+        {
+            UsuarioManipulation<Usuario> item = new UsuarioManipulation<Usuario>();
+            Usuario i = item.FindByID(id);
+            Id = id;
+            Nome = i.Nome;
+            DataCriacao = i.DataCriacao;
+            Idade = i.Idade;
         }
     }
 }

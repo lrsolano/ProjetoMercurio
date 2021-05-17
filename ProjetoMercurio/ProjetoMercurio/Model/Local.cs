@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MercurioCore.Model.Exceptions;
+using ProjetoMercurioCore.db.DataManipulation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,6 +23,51 @@ namespace ProjetoMercurioCore.Model
         {
             Nome = nome;
             Sensor = sensor;
+        }
+
+        public Local(int id)
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+            Local i = item.FindByID(id);
+            Id = id;
+            Nome = i.Nome;
+            DataCriacao = i.DataCriacao;
+            Sensor = i.Sensor;
+        }
+        public void CreateLocal()
+        {
+            if (Id != 0)
+            {
+                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+            }
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+
+            Local novo = item.Create(this);
+
+            Id = novo.Id;
+        }
+        public void UpdateLocal()
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+
+            item.Update(this);
+
+        }
+        public void DeleteLocal()
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+
+            item.Delete(this.Id);
+        }
+        public void ChangeLocal(int id)
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+            Local i = item.FindByID(id);
+            Id = id;
+            Nome = i.Nome;
+            DataCriacao = i.DataCriacao;
+            Sensor = i.Sensor;
+
         }
     }
 }
