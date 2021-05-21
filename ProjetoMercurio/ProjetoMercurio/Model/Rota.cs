@@ -14,7 +14,6 @@ namespace ProjetoMercurioCore.Model
         public Sensor SensorInicial { get; private set; }
         public Sensor SensorFinal { get; set; }
         public string Tracado { get; set; }
-
         public Rota(int id, Sensor sensorInicial, Sensor sensorFinal, string tracado)
         {
             Id = id;
@@ -22,14 +21,12 @@ namespace ProjetoMercurioCore.Model
             SensorFinal = sensorFinal;
             Tracado = tracado;
         }
-
         public Rota(Sensor sensorInicial, Sensor sensorFinal)
         {
             SensorInicial = sensorInicial;
             SensorFinal = sensorFinal;
             GerarRota();
         }
-
         public Rota(int id)
         {
             RotaManipulation<Rota> item = new RotaManipulation<Rota>();
@@ -39,8 +36,12 @@ namespace ProjetoMercurioCore.Model
             SensorInicial = i.SensorInicial;
             Tracado = i.Tracado;
         }
-
-        public void CreateItem()
+        public static List<Rota> FindAll()
+        {
+            RotaManipulation<Rota> item = new RotaManipulation<Rota>();
+            return item.FindAll();
+        }
+        public void CreateRota()
         {
             if (Id != 0)
             {
@@ -126,17 +127,25 @@ namespace ProjetoMercurioCore.Model
 
 
         }
-
-        public static List<Rota> FindAll()
-        {
-            RotaManipulation<Rota> item = new RotaManipulation<Rota>();
-            return item.FindAll();
-        }
-
         private int Exist()
         {
             RotaManipulation<Rota> item = new RotaManipulation<Rota>();
             return item.RotaExist(this);
+        }
+        public override bool Equals(object obj)
+        {
+            var item = obj as Rota;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Id.Equals(item.Id);
+        }
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
         }
     }
 }

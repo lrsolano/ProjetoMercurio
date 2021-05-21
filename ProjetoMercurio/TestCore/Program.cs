@@ -14,12 +14,17 @@ namespace TestCore
         {
             try
             {
-                Sensor inicial = new Sensor(1);
-                Sensor final = new Sensor(6);
+                Pedido pedido = new Pedido(1);
 
-                Rota rota = new Rota(inicial, final);
-                rota.CreateItem();
-                Console.WriteLine(rota.Tracado);
+                Item martelo = new Item(2);
+                Item prego = new Item("Prego");
+                pedido.ChangeItem(martelo, 1);
+                pedido.AddItem(prego, 50);
+
+                pedido.UpdatePedido();
+
+
+
             }
             catch (DBConnectionException ex)
             {

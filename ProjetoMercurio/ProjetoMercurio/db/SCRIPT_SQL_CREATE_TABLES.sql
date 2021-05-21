@@ -66,7 +66,7 @@ CREATE TABLE PedidoXItem(
 	IdPedidoxItem INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	IdPedido INT NOT NULL,
 	IdItem INT NOT NULL,
-	Quantitade INT NOT NULL,
+	Quantidade INT NOT NULL,
 	FOREIGN KEY (IdPedido) REFERENCES pedido(IdPedido),
 	FOREIGN KEY (IdItem) REFERENCES item(IdItem)
 );

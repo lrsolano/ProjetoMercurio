@@ -8,11 +8,11 @@ namespace ProjetoMercurioCore.Model
 {
     public class Item
     {
-        public int IdPedidoxItem { get; private set; }
+        internal int IdPedidoxItem { get; set; }
         public int Id { get; private set; }
         public string Nome { get; private set; }
         public DateTime DataCriacao { get; private set; }
-        public int Quantidade { get; private set; }
+        internal int Quantidade { get; set; }
 
         public Item(int id, string nome, DateTime dataCriacao)
         {
@@ -24,7 +24,6 @@ namespace ProjetoMercurioCore.Model
         {
             Nome = nome;
         }
-
         public Item(int id)
         {
             ItemManipulation<Item> item = new ItemManipulation<Item>();
@@ -33,7 +32,18 @@ namespace ProjetoMercurioCore.Model
             Nome = i.Nome;
             DataCriacao = i.DataCriacao;
         }
-
+        public static Item FindByName(string nome)
+        {
+            ItemManipulation<Item> item = new ItemManipulation<Item>();
+            Item i = item.FindByName(nome);
+            return i;
+        }
+        public static List<Item> FindAll()
+        {
+            ItemManipulation<Item> item = new ItemManipulation<Item>();
+            List<Item> i = item.FindAll();
+            return i;
+        }
         public void CreateItem()
         {
             if (Id != 0)
@@ -71,5 +81,21 @@ namespace ProjetoMercurioCore.Model
         {
             return string.Format("{0} - {1} - {2}", this.Id, this.Nome, this.DataCriacao);
         }
+        public override bool Equals(object obj)
+        {
+            var item = obj as Item;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Id.Equals(item.Id);
+        }
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
+
     }
 }
