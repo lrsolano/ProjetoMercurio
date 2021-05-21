@@ -14,7 +14,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class UsuarioManipulation<T> : IRepository<T> where T : Usuario
     {
         private DBConnection connection;
-
         public UsuarioManipulation()
         {
             connection = new DBConnection();
@@ -25,20 +24,18 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao Usuario no banco.");
             }
             return FindLastId();
         }
-
         public void Delete(long id)
         {
             string sql = string.Format("DELETE FROM projetomercurio.usuario WHERE IdUsuario={0}", id);
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao remover Usuario no banco.");
             }
         }
-
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT IdUsuario FROM  projetomercurio.usuario WHERE IdUsuario={0} ", id);
@@ -53,7 +50,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 return false;
             }
         }
-
         public List<T> FindAll()
         {
             List<T> items = new List<T>();
@@ -72,10 +68,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Usuario encontrado");
             }
         }
-
         public T FindByID(long id)
         {
             string sql = string.Format("SELECT IdUsuario FROM projetomercurio.usuario WHERE IdUsuario={0} ", id);
@@ -89,10 +84,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Usuario encontrado");
             }
         }
-
         public T FindLastId()
         {
             string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario order by IdUsuario desc limit 1 ");
@@ -106,10 +100,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Usuario encontrado");
             }
         }
-
         public T Update(T item)
         {
 
@@ -117,10 +110,26 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao atualizar Usuario no banco.");
             }
 
             return FindByID(item.Id);
+        }
+        public T FindByName(string nome)
+        {
+            string sql = string.Format("SELECT IdUsuario FROM projetomercurio.usuario WHERE Nome='{0}' ", nome);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Usuario item = new Usuario((int)result["IdUsuario"]);
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum Usuario encontrado");
+            }
         }
     }
 }

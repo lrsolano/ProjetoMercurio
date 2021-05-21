@@ -46,6 +46,18 @@ namespace ProjetoMercurioCore.Model
             Direcao = i.Direcao;
             DirecaoRota = i.DirecaoRota;
         }
+        public static Sensor FindByName(string nome)
+        {
+            SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
+            Sensor i = item.FindByName(nome);
+            return i;
+        }
+        public static List<Sensor> FindAll()
+        {
+            SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
+            List<Sensor> i = item.FindAll();
+            return i;
+        }
         public void ChangeType(int id)
         {
             SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
@@ -82,11 +94,6 @@ namespace ProjetoMercurioCore.Model
             SensorManipulation<Sensor> item = new SensorManipulation<Sensor>();
 
             item.Delete(this.Id);
-        }
-        public static List<Sensor> FindAll()
-        {
-            SensorManipulation<Sensor> manipulation = new SensorManipulation<Sensor>();
-            return manipulation.FindAll();
         }
         public override bool Equals(object obj)
         {

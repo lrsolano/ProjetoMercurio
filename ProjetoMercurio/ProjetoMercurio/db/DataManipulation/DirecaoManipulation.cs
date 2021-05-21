@@ -12,7 +12,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class DirecaoManipulation<T> : IRepository<T> where T : Direcao
     {
         private DBConnection connection;
-
         public DirecaoManipulation()
         {
             connection = new DBConnection();
@@ -21,12 +20,10 @@ namespace ProjetoMercurioCore.db.DataManipulation
         {
             throw new NotImplementedException();
         }
-
         public void Delete(long id)
         {
             throw new NotImplementedException();
         }
-
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT IdDirecao FROM  projetomercurio.direcao WHERE IdDirecao={0} ", id);
@@ -41,7 +38,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 return false;
             }
         }
-
         public List<T> FindAll()
         {
             List<T> items = new List<T>();
@@ -60,10 +56,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhuma Direção encontrada");
             }
         }
-
         public T FindByID(long id)
         {
             string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE IdDirecao={0} ", id);
@@ -77,18 +72,32 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhuma Direção encontrada");
             }
         }
-
         public T FindLastId()
         {
             throw new NotImplementedException();
         }
-
         public T Update(T item)
         {
             throw new NotImplementedException();
+        }
+        public T FindByName(string movimento)
+        {
+            string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE Movimento='{0}' ", movimento);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Direcao item = new Direcao((int)result["IdDirecao"], result["Movimento"].ToString());
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhuma Direção encontrada");
+            }
         }
     }
 }

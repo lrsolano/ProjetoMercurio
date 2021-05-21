@@ -12,7 +12,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class ItemManipulation<T> : IRepository<T> where T : Item
     {
         private DBConnection connection;
-
         public ItemManipulation()
         {
             connection = new DBConnection();
@@ -33,7 +32,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             string sql = string.Format("DELETE FROM projetomercurio.item WHERE IdItem={0}", id);
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao remover item no banco.");
             }
         }
         public bool Exists(long id)
@@ -68,7 +67,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Item encontrado");
             }
         }
         public T FindByID(long id)
@@ -84,7 +83,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Item encontrado");
             }
         }
         public T FindLastId()
@@ -100,7 +99,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Item encontrado");
             }
         }
         public T Update(T item)
@@ -109,10 +108,26 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao atualizar item no banco.");
             }
 
             return FindByID(item.Id);
+        }
+        public T FindByName(string nome)
+        {
+            string sql = string.Format("SELECT IdItem, Nome, DataCriacao FROM  projetomercurio.item WHERE Nome='{0}' ", nome);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Item item = new Item((int)result["IdItem"], result["Nome"].ToString(), (DateTime)result["DataCriacao"]);
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum item encontrado");
+            }
         }
     }
 }

@@ -24,7 +24,6 @@ namespace ProjetoMercurioCore.Model
             Nome = nome;
             Sensor = sensor;
         }
-
         public Local(int id)
         {
             LocalManipulation<Local> item = new LocalManipulation<Local>();
@@ -33,6 +32,18 @@ namespace ProjetoMercurioCore.Model
             Nome = i.Nome;
             DataCriacao = i.DataCriacao;
             Sensor = i.Sensor;
+        }
+        public static Local FindByName(string nome)
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+            Local i = item.FindByName(nome);
+            return i;
+        }
+        public static List<Local> FindAll()
+        {
+            LocalManipulation<Local> item = new LocalManipulation<Local>();
+            List<Local> i = item.FindAll();
+            return i;
         }
         public void CreateLocal()
         {
@@ -68,6 +79,21 @@ namespace ProjetoMercurioCore.Model
             DataCriacao = i.DataCriacao;
             Sensor = i.Sensor;
 
+        }
+        public override bool Equals(object obj)
+        {
+            var item = obj as Local;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Id.Equals(item.Id);
+        }
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
         }
     }
 }

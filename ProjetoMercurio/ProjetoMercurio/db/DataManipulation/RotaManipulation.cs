@@ -14,7 +14,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class RotaManipulation<T> : IRepository<T> where T : Rota
     {
         private DBConnection connection;
-
         public RotaManipulation()
         {
             connection = new DBConnection();
@@ -25,7 +24,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao inserir Rota no banco.");
             }
 
             return FindLastId();
@@ -35,7 +34,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             string sql = string.Format("DELETE FROM projetomercurio.rota WHERE IdRota={0}", id);
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao remover Rota no banco.");
             }
         }
         public bool Exists(long id)
@@ -70,7 +69,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhuma Rota encontrada");
             }
         }
         public T FindByID(long id)
@@ -89,7 +88,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhuma Rota encontrado");
             }
         }
         public T FindLastId()
@@ -105,7 +104,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhuma Rota encontrado");
             }
         }
         public T Update(T item)
@@ -114,7 +113,7 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao atualizar Rota no banco.");
             }
 
             return FindByID(item.Id);

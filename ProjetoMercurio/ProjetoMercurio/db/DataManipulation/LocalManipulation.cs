@@ -12,7 +12,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class LocalManipulation<T> : IRepository<T> where T : Local
     {
         private DBConnection connection;
-
         public LocalManipulation()
         {
             connection = new DBConnection();
@@ -23,21 +22,19 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao inserir Local no banco.");
             }
 
             return FindLastId();
         }
-
         public void Delete(long id)
         {
             string sql = string.Format("DELETE FROM projetomercurio.local WHERE IdLocal={0}", id);
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao remover Local no banco.");
             }
         }
-
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT IdLocal FROM  projetomercurio.local WHERE IdLocal={0} ", id);
@@ -52,7 +49,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 return false;
             }
         }
-
         public List<T> FindAll()
         {
             List<T> items = new List<T>();
@@ -72,10 +68,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Local encontrado");
             }
         }
-
         public T FindByID(long id)
         {
             string sql = string.Format("SELECT IdLocal, Nome, DataCriacao, IdSensor FROM projetomercurio.local WHERE IdLocal={0} ", id);
@@ -90,10 +85,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Local encontrado");
             }
         }
-
         public T FindLastId()
         {
             string sql = string.Format("SELECT IdLocal, Nome, DataCriacao, IdSensor FROM projetomercurio.local order by IdLocal desc limit 1 ");
@@ -107,20 +101,36 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Local encontrado");
             }
         }
-
         public T Update(T item)
         {
             string sql = string.Format("UPDATE projetomercurio.Local SET  Nome = '{0}', IdSensor = {1} WHERE IdSensor = {2}", item.Nome, item.Sensor.Id, item.Id);
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao atualizar Local no banco.");
             }
 
             return FindByID(item.Id);
+        }
+        public T FindByName(string nome)
+        {
+            string sql = string.Format("SELECT IdLocal, Nome, DataCriacao, IdSensor FROM projetomercurio.local WHERE Nome='{0}' ", nome);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                result.Read();
+                Sensor sensor = new Sensor((int)result["IdSensor"]);
+                Local item = new Local((int)result["IdLocal"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], sensor);
+                result.Close();
+                return (T)item;
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum Local encontrado");
+            }
         }
     }
 }

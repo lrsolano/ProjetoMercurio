@@ -31,5 +31,32 @@ namespace ProjetoMercurioCore.Model
             Id = id;
             Movimento = i.Movimento;
         }
+        public static Direcao FindByName(string nome)
+        {
+            DirecaoManipulation<Direcao> item = new DirecaoManipulation<Direcao>();
+            Direcao i = item.FindByName(nome);
+            return i;
+        }
+        public static List<Direcao> FindAll()
+        {
+            DirecaoManipulation<Direcao> item = new DirecaoManipulation<Direcao>();
+            List<Direcao> i = item.FindAll();
+            return i;
+        }
+        public override bool Equals(object obj)
+        {
+            var item = obj as Direcao;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Id.Equals(item.Id);
+        }
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

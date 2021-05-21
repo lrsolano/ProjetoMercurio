@@ -13,7 +13,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
     class SensorManipulation<T> : IRepository<T> where T : Sensor
     {
         private DBConnection connection;
-
         public SensorManipulation()
         {
             connection = new DBConnection();
@@ -45,21 +44,19 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao inserir Sensor no banco.");
             }
 
             return FindLastId();
         }
-
         public void Delete(long id)
         {
             string sql = string.Format("DELETE FROM projetomercurio.sensor WHERE IdSensor={0}", id);
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao remover sensor no banco.");
             }
         }
-
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
@@ -74,7 +71,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 return false;
             }
         }
-
         public List<T> FindAll()
         {
             List<T> items = new List<T>();
@@ -93,10 +89,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Sensor encontrado");
             }
         }
-
         public T FindByID(long id)
         {
             string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
@@ -134,11 +129,10 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Sensor encontrado");
             }
             throw new NotImplementedException();
         }
-
         public T FindLastId()
         {
             string sql = string.Format("SELECT IdSensor FROM  projetomercurio.sensor order by IdSensor desc limit 1 ");
@@ -152,10 +146,9 @@ namespace ProjetoMercurioCore.db.DataManipulation
             }
             else
             {
-                throw new DBConnectionException("Nenhum registro encontrado");
+                throw new DBConnectionException("Nenhum Sensor encontrado");
             }
         }
-
         public T Update(T item)
         {
             string direcaoRota = string.Empty;
@@ -170,14 +163,34 @@ namespace ProjetoMercurioCore.db.DataManipulation
 
             }
 
-            string sql = string.Format("UPDATE projetomercurio.sensor SET  Nome = '{0}', Inicial = {1}, IdDirecao = {2}, DirecaoRota = '{3}'WHERE IdItem = {4}", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
+            string sql = string.Format("UPDATE projetomercurio.sensor SET  Nome = '{0}', Inicial = {1}, IdDirecao = {2}, DirecaoRota = '{3}'WHERE IdSensor = {4}", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
 
             if (!connection.SendCommand(sql))
             {
-                throw new DBConnectionException("Erro ao inserir item no banco.");
+                throw new DBConnectionException("Erro ao atualizar Sensor no banco.");
             }
 
             return FindByID(item.Id);
+        }
+        public T FindByName(string nome)
+        {
+            Sensor sensor = null;
+            string sql = string.Format("SELECT IdSensor FROM projetomercurio.sensor WHERE Nome = '{0}'", nome);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    sensor = new Sensor((int)result["IdSensor"]);
+                }
+                result.Close();
+
+                return ((T)sensor);
+            }
+            else
+            {
+                throw new DBConnectionException("Nenhum Sensor encontrado");
+            }
         }
     }
 }
