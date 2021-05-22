@@ -1,12 +1,12 @@
-﻿using MercurioCore.Model.Exceptions;
-using MySqlConnector;
+﻿using MySqlConnector;
 using System;
+using Mercurio.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MercurioCore.db
+namespace Mercurio.Repository
 {
     class DBConnection
     {

@@ -48,10 +48,13 @@ namespace ProjetoMercurioCore.Model
         {
             if (Id != 0)
             {
-                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+                throw new MercurioCoreException("Item já criado no Banco de Dados");
             }
             ItemManipulation<Item> item = new ItemManipulation<Item>();
-
+            if (item.FindByName(Nome) == null)
+            {
+                throw new MercurioCoreException("Item já criado no Banco de Dados");
+            }
             Item novo = item.Create(this);
 
             Id = novo.Id;

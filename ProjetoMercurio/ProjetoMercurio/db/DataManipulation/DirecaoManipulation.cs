@@ -52,28 +52,22 @@ namespace ProjetoMercurioCore.db.DataManipulation
                 }
                 result.Close();
 
-                return (items);
             }
-            else
-            {
-                throw new DBConnectionException("Nenhuma Direção encontrada");
-            }
+            return items;
+
         }
         public T FindByID(long id)
         {
+            Direcao item = null;
             string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE IdDirecao={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
                 result.Read();
-                Direcao item = new Direcao((int)result["IdDirecao"], result["Movimento"].ToString());
+                item = new Direcao((int)result["IdDirecao"], result["Movimento"].ToString());
                 result.Close();
-                return (T)item;
             }
-            else
-            {
-                throw new DBConnectionException("Nenhuma Direção encontrada");
-            }
+            return (T)item;
         }
         public T FindLastId()
         {
@@ -85,19 +79,17 @@ namespace ProjetoMercurioCore.db.DataManipulation
         }
         public T FindByName(string movimento)
         {
+            Direcao item = null;
             string sql = string.Format("SELECT IdDirecao, Movimento FROM  projetomercurio.direcao WHERE Movimento='{0}' ", movimento);
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
                 result.Read();
-                Direcao item = new Direcao((int)result["IdDirecao"], result["Movimento"].ToString());
+                item = new Direcao((int)result["IdDirecao"], result["Movimento"].ToString());
                 result.Close();
-                return (T)item;
+                
             }
-            else
-            {
-                throw new DBConnectionException("Nenhuma Direção encontrada");
-            }
+            return (T)item;
         }
     }
 }
