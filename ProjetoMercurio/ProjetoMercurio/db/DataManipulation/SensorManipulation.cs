@@ -131,7 +131,6 @@ namespace ProjetoMercurioCore.db.DataManipulation
             {
                 throw new DBConnectionException("Nenhum Sensor encontrado");
             }
-            throw new NotImplementedException();
         }
         public T FindLastId()
         {

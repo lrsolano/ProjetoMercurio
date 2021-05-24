@@ -98,6 +98,8 @@ namespace Mercurio.Core
 					cmd.ExecuteNonQuery();
 
 					this.CloseConnection();
+
+					result = true;
 				}
                 else
                 {

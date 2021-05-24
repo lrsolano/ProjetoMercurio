@@ -43,48 +43,45 @@ namespace Mercurio.Core
                     Usuario item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
                     items.Add(item);
                 }
-                result.Close();
+                
 
-                return (items);
+                
             }
-            else
-            {
-                throw new DBConnectionException("Nenhum Usuario encontrado");
-            }
+            result.Close();
+            return items;
         }
 
         public Usuario FindByID(long id)
         {
-            string sql = string.Format("SELECT IdUsuario FROM projetomercurio.usuario WHERE IdUsuario={0} ", id);
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario WHERE IdUsuario={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
+            Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                Usuario item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
-                result.Close();
-                return item;
+                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
+                
+                
             }
-            else
-            {
-                throw new DBConnectionException("Nenhum Usuario encontrado");
-            }
+            result.Close();
+            return item;
+
         }
 
         public Usuario FindLastId()
         {
             string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario order by IdUsuario desc limit 1 ");
             MySqlDataReader result = connection.SendQuery(sql);
+            Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                Usuario item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
-                result.Close();
-                return item;
+                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
+                
+                
             }
-            else
-            {
-                throw new DBConnectionException("Nenhum Usuario encontrado");
-            }
+            result.Close();
+            return item;
         }
 
         public Usuario Update(Usuario item)
@@ -102,17 +99,16 @@ namespace Mercurio.Core
         {
             string sql = string.Format("SELECT IdUsuario FROM projetomercurio.usuario WHERE Nome='{0}' ", nome);
             MySqlDataReader result = connection.SendQuery(sql);
+            Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                Usuario item = new Usuario((int)result["IdUsuario"]);
-                result.Close();
-                return item;
+                item = new Usuario((int)result["IdUsuario"]);
+                
+                
             }
-            else
-            {
-                throw new DBConnectionException("Nenhum Usuario encontrado");
-            }
+            result.Close();
+            return item;
         }
     }
 }
