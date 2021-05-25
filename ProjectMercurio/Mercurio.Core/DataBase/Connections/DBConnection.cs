@@ -10,9 +10,11 @@ namespace Mercurio.Core
         private string database;
         private string uid;
         private string password;
+		private LogActivity log;
 
         public DBConnection()
         {
+			log = new LogActivity(LogNivel.Verbose, "DataBase");
             Initialize();
         }
 
@@ -38,6 +40,7 @@ namespace Mercurio.Core
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+			//log.Write(LogNivel.Info, string.Format("Connection String: {0}", connectionString));
             connection = new MySqlConnection(connectionString);
         }
 		private bool OpenConnection()
@@ -50,6 +53,7 @@ namespace Mercurio.Core
 			}
 			catch (MySqlException ex)
 			{
+				log.Write(LogNivel.Erro, ex);
 				switch (ex.Number)
 				{
 					case 0:
@@ -67,6 +71,7 @@ namespace Mercurio.Core
 			catch(Exception ex)
             {
                 Console.WriteLine(ex);
+				log.Write(LogNivel.Erro, ex);
 				throw new DBConnectionException(ex.Message);
 			}
 			return result;
@@ -81,6 +86,7 @@ namespace Mercurio.Core
 			}
 			catch (MySqlException ex)
 			{
+				log.Write(LogNivel.Erro, ex);
 				throw new DBConnectionException(ex.Message);
 			}
 			return result;
@@ -89,7 +95,8 @@ namespace Mercurio.Core
 		public bool SendCommand(string sql)
         {
 			bool result = false;
-            try
+			log.Write(LogNivel.Info, string.Format("Command: {0}", sql));
+			try
             {
 				if (this.OpenConnection() == true)
 				{
@@ -108,6 +115,7 @@ namespace Mercurio.Core
 			}
 			catch(Exception ex)
             {
+				log.Write(LogNivel.Erro, ex);
 				throw new DBConnectionException(string.Format("DBConection => {0}", ex));
             }
 
@@ -120,6 +128,7 @@ namespace Mercurio.Core
 		public MySqlDataReader SendQuery(string query)
         {
 			MySqlDataReader dataReader = null;
+			log.Write(LogNivel.Info, string.Format("Query: {0}", query));
 			try
             {
 				if (this.OpenConnection() == true)
@@ -130,6 +139,7 @@ namespace Mercurio.Core
             }
             catch (Exception ex)
             {
+				log.Write(LogNivel.Erro, ex);
 				throw new DBConnectionException(string.Format("DBConection => {0}", ex));
 			}
 			return dataReader;

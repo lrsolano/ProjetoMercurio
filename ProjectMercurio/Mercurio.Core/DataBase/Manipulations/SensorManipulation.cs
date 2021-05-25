@@ -29,13 +29,13 @@ namespace Mercurio.Core
 
             }
             string sql = string.Empty;
-            if (item.SensorAnterior == null)
+            if (item.SensorAnterior == 0)
             {
                 sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('{0}',now(),{1},{2},'{3}');", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
             }
             else
             {
-                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('{0}',now(),{1},{2},'{3}',{4});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota, item.SensorAnterior.Id);
+                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('{0}',now(),{1},{2},'{3}',{4});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota, item.SensorAnterior);
             }
 
 
@@ -65,15 +65,15 @@ namespace Mercurio.Core
             {
                 while (result.Read())
                 {
-                    Sensor sensor;
+                    int sensor;
                     int idAnterior = 0;
                     if (!Int32.TryParse(result["IdSensorAnterior"].ToString(), out idAnterior))
                     {
-                        sensor = null;
+                        sensor = 0;
                     }
                     else
                     {
-                        sensor = new Sensor((int)result["IdSensorAnterior"]);
+                        sensor = (int)result["IdSensorAnterior"];
                     }
 
                     Direcao direcao = new Direcao((int)result["IdDirecao"]);
@@ -108,15 +108,15 @@ namespace Mercurio.Core
             if (result.HasRows)
             {
                 result.Read();
-                Sensor sensor;
+                int sensor;
                 int idAnterior = 0;
                 if (!Int32.TryParse(result["IdSensorAnterior"].ToString(), out idAnterior))
                 {
-                    sensor = null;
+                    sensor = 0;
                 }
                 else
                 {
-                    sensor = new Sensor((int)result["IdSensorAnterior"]);
+                    sensor = ((int)result["IdSensorAnterior"]);
                 }
 
                 Direcao direcao = new Direcao((int)result["IdDirecao"]);
@@ -148,15 +148,15 @@ namespace Mercurio.Core
             if (result.HasRows)
             {
                 result.Read();
-                Sensor sensor;
+                int sensor;
                 int idAnterior = 0;
                 if (!Int32.TryParse(result["IdSensorAnterior"].ToString(), out idAnterior))
                 {
-                    sensor = null;
+                    sensor = 0;
                 }
                 else
                 {
-                    sensor = new Sensor((int)result["IdSensorAnterior"]);
+                    sensor =(int)result["IdSensorAnterior"];
                 }
 
                 Direcao direcao = new Direcao((int)result["IdDirecao"]);
@@ -212,15 +212,15 @@ namespace Mercurio.Core
             {
                 while (result.Read())
                 {
-                    Sensor sensor1;
+                    int sensor1;
                     int idAnterior = 0;
                     if (!Int32.TryParse(result["IdSensorAnterior"].ToString(), out idAnterior))
                     {
-                        sensor1 = null;
+                        sensor1 = 0;
                     }
                     else
                     {
-                        sensor1 = new Sensor((int)result["IdSensorAnterior"]);
+                        sensor1 = ((int)result["IdSensorAnterior"]);
                     }
 
                     Direcao direcao = new Direcao((int)result["IdDirecao"]);

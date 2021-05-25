@@ -10,11 +10,11 @@ namespace Mercurio.Core
     {
         public string Nome { get; private set; }
         public Boolean Inicial { get; private set; }
-        public Sensor SensorAnterior { get; set; }
+        public int SensorAnterior { get; set; }
         public Direcao Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; private set; }
         public bool Ativo { get; set; }
-        public Sensor(int id, string nome, DateTime dataCriacao, bool inicial, Sensor sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        public Sensor(int id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
         {
             Id = id;
             Nome = nome;
@@ -24,7 +24,7 @@ namespace Mercurio.Core
             Direcao = direcao;
             DirecaoRota = direcaoRota;
         }
-        public Sensor(string nome, bool inicial, Sensor sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        public Sensor(string nome, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
         {
             Nome = nome;
             Inicial = inicial;

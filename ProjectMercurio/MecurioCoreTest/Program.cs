@@ -9,12 +9,8 @@ namespace MecurioCoreTest
         {
             try
             {
-                Pedido pedido = new Pedido(1);
-                Item marreta = Item.FindByName("Marreta");
-                pedido.RemoveItem(marreta);
-                //pedido.ChangeItem(prego, 50);
-                pedido.UpdatePedido();
-
+                Item marreta = new Item("Marreta");
+                marreta.CreateItem();
             }
             catch(MercurioCoreException ex)
             {

@@ -14,7 +14,8 @@ namespace Mercurio.Core
         public MercurioCoreException(string message)
         : base(String.Format("Mercurio Core Error: {0}", message))
         {
-
+            LogActivity log = new LogActivity(LogNivel.Erro, "MercurioCoreException");
+            log.Write(LogNivel.Erro, message);
         }
     }
 }

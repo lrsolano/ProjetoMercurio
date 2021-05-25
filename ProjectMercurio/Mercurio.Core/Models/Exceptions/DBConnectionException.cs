@@ -14,7 +14,8 @@ namespace Mercurio.Core
         public DBConnectionException(string message)
         : base(String.Format("DataBase Error: {0}", message))
         {
-
+            LogActivity log = new LogActivity(LogNivel.Erro, "DBConnectionException");
+            log.Write(LogNivel.Erro, message);
         }
     }
 }
