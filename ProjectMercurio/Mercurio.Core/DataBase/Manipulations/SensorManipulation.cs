@@ -46,7 +46,6 @@ namespace Mercurio.Core
 
             return FindLastId();
         }
-
         public void Delete(long id)
         {
             string sql = string.Format("DELETE FROM projetomercurio.sensor WHERE IdSensor={0}", id);
@@ -55,7 +54,6 @@ namespace Mercurio.Core
                 throw new DBConnectionException("Erro ao remover sensor no banco.");
             }
         }
-
         public List<Sensor> FindAll()
         {
             List<Sensor> items = new List<Sensor>();
@@ -99,7 +97,6 @@ namespace Mercurio.Core
             result.Close();
             return (items);
         }
-
         public Sensor FindByID(long id)
         {
             string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
@@ -139,7 +136,6 @@ namespace Mercurio.Core
             result.Close();
             return item;
         }
-
         public Sensor FindLastId()
         {
             string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM  projetomercurio.sensor order by IdSensor desc limit 1 ");
@@ -179,7 +175,6 @@ namespace Mercurio.Core
             result.Close();
             return item;
         }
-
         public Sensor Update(Sensor item)
         {
             string direcaoRota = string.Empty;
@@ -244,6 +239,31 @@ namespace Mercurio.Core
             }
             result.Close();
             return sensor;
+        }
+
+        public bool CanDelete(long id)
+        {
+            bool resultado;
+
+            string sql = string.Format(@"SELECT a.IdSensorAnterior FROM  projetomercurio.sensor as a
+                                        left join projetomercurio.local as b on a.IdSensorAnterior = b.IdSensor
+                                        left join projetomercurio.rota as c on c.IdSensorInicial = a.IdSensorAnterior 
+                                        left join projetomercurio.rota as d on d.IdSensorFinal = a.IdSensorAnterior 
+                                        WHERE IdSensorAnterior={0} ", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+            
+            if (result.HasRows)
+            {
+                result.Close();
+                resultado = false;
+            }
+            else
+            {
+                result.Close();
+                resultado = true;
+            }
+
+            return resultado;
         }
     }
 }

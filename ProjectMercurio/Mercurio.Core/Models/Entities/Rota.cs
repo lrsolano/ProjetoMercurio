@@ -75,8 +75,15 @@ namespace Mercurio.Core
         public void DeleteItem()
         {
             RotaManipulation item = new RotaManipulation();
-
-            item.Delete(this.Id);
+            if (item.CanDelete(Id))
+            {
+                item.Delete(this.Id);
+            }
+            else
+            {
+                throw new MercurioCoreException("Rota em uso.");
+            }
+            
         }
         public void ChangeItem(int id)
         {

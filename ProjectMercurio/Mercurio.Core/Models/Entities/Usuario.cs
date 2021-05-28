@@ -72,8 +72,15 @@ namespace Mercurio.Core
         public void DeleteUsuario()
         {
             UsuarioManipulation item = new UsuarioManipulation();
-
-            item.Delete(this.Id);
+            if (item.CanDelete(Id))
+            {
+                item.Delete(this.Id);
+            }
+            else
+            {
+                throw new MercurioCoreException("Usuario em uso");
+            }
+            
         }
         public void ChangeUsuario(int id)
         {

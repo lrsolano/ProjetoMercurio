@@ -93,8 +93,15 @@ namespace Mercurio.Core
         public void DeleteSensor()
         {
             SensorManipulation item = new SensorManipulation();
+            if (item.CanDelete(Id))
+            {
+                item.Delete(Id);
+            }
+            else
+            {
+                throw new MercurioCoreException("Sensor em uso.");
+            }
 
-            item.Delete(this.Id);
         }
         public override bool Equals(object obj)
         {

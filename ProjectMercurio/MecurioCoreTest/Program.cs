@@ -9,8 +9,8 @@ namespace MecurioCoreTest
         {
             try
             {
-                Item marreta = new Item("Marreta");
-                marreta.CreateItem();
+                Sensor marreta = new Sensor(7);
+                marreta.DeleteSensor();
             }
             catch(MercurioCoreException ex)
             {

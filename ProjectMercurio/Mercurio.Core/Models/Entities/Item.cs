@@ -75,8 +75,15 @@ namespace Mercurio.Core
         public void DeleteItem()
         {
             ItemManipulation item = new ItemManipulation();
+            if (item.CanDelete(Id))
+            {
+                item.Delete(this.Id);
+            }
+            else
+            {
+                throw new MercurioCoreException("Item em uso.");
+            }
 
-            item.Delete(this.Id);
         }
         public void ChangeItem(int id)
         {

@@ -111,5 +111,26 @@ namespace Mercurio.Core
             return item;
 
         }
+        public bool CanDelete(long id)
+        {
+            bool resultado;
+
+            string sql = string.Format(@"SELECT IdPedidoxItem FROM projetomercurio.PedidoXItem
+                                            where IdItem = {0};", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+
+            if (result.HasRows)
+            {
+                result.Close();
+                resultado = false;
+            }
+            else
+            {
+                result.Close();
+                resultado = true;
+            }
+
+            return resultado;
+        }
     }
 }

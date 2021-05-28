@@ -125,5 +125,26 @@ namespace Mercurio.Core
             return idRetorno;
 
         }
+        public bool CanDelete(long id)
+        {
+            bool resultado;
+
+            string sql = string.Format(@"SELECT IdRota FROM projetomercurio.pedido
+                                            WHERE IdRota = {0};", id);
+            MySqlDataReader result = connection.SendQuery(sql);
+
+            if (result.HasRows)
+            {
+                result.Close();
+                resultado = false;
+            }
+            else
+            {
+                result.Close();
+                resultado = true;
+            }
+
+            return resultado;
+        }
     }
 }
