@@ -75,10 +75,14 @@ namespace Mercurio.Core
         {
             if (Id != 0)
             {
-                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+                throw new MercurioCoreException("Sensor já criado no Banco de Dados");
             }
-            SensorManipulation item = new SensorManipulation();
 
+            SensorManipulation item = new SensorManipulation();
+            if (item.FindByName(Nome) == null)
+            {
+                throw new MercurioCoreException("Sensor já criado no Banco de Dados");
+            }
             Sensor novo = item.Create(this);
 
             Id = novo.Id;

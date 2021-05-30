@@ -57,7 +57,10 @@ namespace Mercurio.Core
                 throw new MercurioCoreException("Usuario já criado no Banco de Dados");
             }
             UsuarioManipulation item = new UsuarioManipulation();
-
+            if (item.FindByName(Nome) == null)
+            {
+                throw new MercurioCoreException("Usuario já criado no Banco de Dados");
+            }
             Usuario novo = item.Create(this);
 
             Id = novo.Id;
@@ -66,6 +69,10 @@ namespace Mercurio.Core
         {
             UsuarioManipulation item = new UsuarioManipulation();
 
+            if (item.FindByName(Nome) == null)
+            {
+                throw new MercurioCoreException("Sensor já criado no Banco de Dados");
+            }
             item.Update(this);
 
         }

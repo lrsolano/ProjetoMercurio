@@ -52,10 +52,14 @@ namespace Mercurio.Core
         {
             if (Id != 0)
             {
-                throw new MercurioCoreException("Objeto já criado no Banco de Dados");
+                throw new MercurioCoreException("Local já criado no Banco de Dados");
             }
+            
             LocalManipulation item = new LocalManipulation();
-
+            if (item.FindByName(Nome) == null)
+            {
+                throw new MercurioCoreException("Local já criado no Banco de Dados");
+            }
             Local novo = item.Create(this);
 
             Id = novo.Id;
