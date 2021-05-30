@@ -86,7 +86,7 @@ namespace Mercurio.Core
 
         public Usuario Update(Usuario item)
         {
-            string sql = string.Format("UPDATE projetomercurio.usuario SET  Nome = '{0}', Idade = {1}, Senha ='{2}' WHERE IdUsuario = {2}", item.Nome, item.Idade, item.Id, item.Senha);
+            string sql = string.Format("UPDATE projetomercurio.usuario SET  Nome = '{0}', Idade = {1}, Senha ='{3}' WHERE IdUsuario = {2}", item.Nome, item.Idade, item.Id, item.Senha);
 
             if (!connection.SendCommand(sql))
             {
@@ -97,15 +97,15 @@ namespace Mercurio.Core
         }
         public Usuario FindByName(string nome)
         {
-            string sql = string.Format("SELECT IdUsuario FROM projetomercurio.usuario WHERE Nome='{0}' ", nome);
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha, Idade FROM projetomercurio.usuario WHERE Nome='{0}' ", nome);
             MySqlDataReader result = connection.SendQuery(sql);
             Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                item = new Usuario((int)result["IdUsuario"]);
-                
-                
+                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"], result["Senha"].ToString());
+
+
             }
             result.Close();
             return item;

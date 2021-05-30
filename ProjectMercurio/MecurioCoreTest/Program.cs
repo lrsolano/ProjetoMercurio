@@ -11,9 +11,7 @@ namespace MecurioCoreTest
         {
             try
             {
-                Usuario leo = new Usuario("Leonardo", 23);
-                leo.AddSenha("ecmmaster");
-                leo.CreateUsuario();
+
 
             }
             catch(MercurioCoreException ex)

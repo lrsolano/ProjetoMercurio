@@ -39,6 +39,7 @@ namespace Mercurio.Core
                 Nome = i.Nome;
                 base.DataCriacao = i.DataCriacao;
                 Idade = i.Idade;
+                Senha = i.Senha;
             }
         }
         public static Usuario FindByName(string nome)
@@ -59,7 +60,6 @@ namespace Mercurio.Core
             Usuario i = item.FindByID(id);
             return i;
         }
-
         public void CreateUsuario()
         {
             if (string.IsNullOrEmpty(Senha))
@@ -120,6 +120,16 @@ namespace Mercurio.Core
         {
             string password = Password.ComputeHash(senha, "SHA256");
             Senha = password;
+        }
+        public void ChangePassword(PasswordChange passwordChange) 
+        {
+            string oldPassword = Password.ComputeHash(passwordChange.SenhaAntiga, "SHA256");
+            if(oldPassword != Senha)
+            {
+                throw new MercurioCoreException("Senha antiga inválida");
+            }
+            AddSenha(passwordChange.NovaSenha);
+            UpdateUsuario();
         }
         public override bool Equals(object obj)
         {
