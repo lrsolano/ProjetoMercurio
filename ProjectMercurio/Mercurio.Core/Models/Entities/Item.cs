@@ -13,7 +13,7 @@ namespace Mercurio.Core
         internal int Quantidade { get; set; }
         public bool Ativo { get; set ; }
         internal bool RemoveItem { get; set; }
-        public Item(int id, string nome, DateTime dataCriacao) : base("item", "IdItem")
+        internal Item(int id, string nome, DateTime dataCriacao) : base("item", "IdItem")
         {
             Id = id;
             Nome = nome;
@@ -25,7 +25,7 @@ namespace Mercurio.Core
             Nome = nome;
             RemoveItem = false;
         }
-        public Item(int id) : base("item", "IdItem")
+        internal Item(int id) : base("item", "IdItem")
         {
             if (base.Exists(id))
             {
@@ -48,6 +48,12 @@ namespace Mercurio.Core
         {
             ItemManipulation item = new ItemManipulation();
             List<Item> i = item.FindAll();
+            return i;
+        }
+        public static Item DindById(long id)
+        {
+            ItemManipulation item = new ItemManipulation();
+            Item i = item.FindByID(id);
             return i;
         }
         public void CreateItem()

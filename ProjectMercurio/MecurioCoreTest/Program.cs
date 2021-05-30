@@ -1,5 +1,7 @@
 ﻿using System;
 using Mercurio.Core;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace MecurioCoreTest
 {
@@ -9,8 +11,10 @@ namespace MecurioCoreTest
         {
             try
             {
-                Sensor marreta = new Sensor(7);
-                marreta.DeleteSensor();
+                Usuario leo = new Usuario("Leonardo", 23);
+                leo.AddSenha("ecmmaster");
+                leo.CreateUsuario();
+
             }
             catch(MercurioCoreException ex)
             {

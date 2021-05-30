@@ -11,7 +11,7 @@ namespace Mercurio.Core
         public Sensor SensorInicial { get; private set; }
         public Sensor SensorFinal { get; set; }
         public string Tracado { get; set; }
-        public Rota(int id, Sensor sensorInicial, Sensor sensorFinal, string tracado) : base("rota", "IdRota")
+        internal Rota(int id, Sensor sensorInicial, Sensor sensorFinal, string tracado) : base("rota", "IdRota")
         {
             Id = id;
             SensorInicial = sensorInicial;
@@ -24,7 +24,7 @@ namespace Mercurio.Core
             SensorFinal = sensorFinal;
             GerarRota();
         }
-        public Rota(int id) : base("rota", "IdRota")
+        internal Rota(int id) : base("rota", "IdRota")
         {
             if (base.Exists(id))
             {
@@ -41,6 +41,11 @@ namespace Mercurio.Core
         {
             RotaManipulation item = new RotaManipulation();
             return item.FindAll();
+        }
+        public static Rota FindById(long id)
+        {
+            RotaManipulation item = new RotaManipulation();
+            return item.FindByID(id);
         }
         public void CreateRota()
         {

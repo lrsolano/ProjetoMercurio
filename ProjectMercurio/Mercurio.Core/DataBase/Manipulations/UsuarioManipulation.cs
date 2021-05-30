@@ -13,7 +13,7 @@ namespace Mercurio.Core
         }
         public Usuario Create(Usuario item)
         {
-            string sql = string.Format("INSERT INTO projetomercurio.usuario (Nome, DataCriacao, Idade) VALUES ('{0}', NOW(),{1})", item.Nome, item.Idade);
+            string sql = string.Format("INSERT INTO projetomercurio.usuario (Nome, DataCriacao, Idade, Senha) VALUES ('{0}', NOW(),{1}, '{2}')", item.Nome, item.Idade, item.Senha);
 
             if (!connection.SendCommand(sql))
             {
@@ -34,13 +34,13 @@ namespace Mercurio.Core
         public List<Usuario> FindAll()
         {
             List<Usuario> items = new List<Usuario>();
-            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario");
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha Idade FROM projetomercurio.usuario");
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
                 while (result.Read())
                 {
-                    Usuario item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
+                    Usuario item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"], result["Senha"].ToString());
                     items.Add(item);
                 }
                 
@@ -53,13 +53,13 @@ namespace Mercurio.Core
 
         public Usuario FindByID(long id)
         {
-            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario WHERE IdUsuario={0} ", id);
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha, Idade FROM projetomercurio.usuario WHERE IdUsuario={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
             Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
+                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"], result["Senha"].ToString());
                 
                 
             }
@@ -70,13 +70,13 @@ namespace Mercurio.Core
 
         public Usuario FindLastId()
         {
-            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Idade FROM projetomercurio.usuario order by IdUsuario desc limit 1 ");
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha, Idade FROM projetomercurio.usuario order by IdUsuario desc limit 1 ");
             MySqlDataReader result = connection.SendQuery(sql);
             Usuario item = null;
             if (result.HasRows)
             {
                 result.Read();
-                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"]);
+                item = new Usuario((int)result["IdUsuario"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (int)result["Idade"],result["Senha"].ToString());
                 
                 
             }
@@ -86,7 +86,7 @@ namespace Mercurio.Core
 
         public Usuario Update(Usuario item)
         {
-            string sql = string.Format("UPDATE projetomercurio.usuario SET  Nome = '{0}', Idade = {1} WHERE IdUsuario = {2}", item.Nome, item.Idade, item.Id);
+            string sql = string.Format("UPDATE projetomercurio.usuario SET  Nome = '{0}', Idade = {1}, Senha ='{2}' WHERE IdUsuario = {2}", item.Nome, item.Idade, item.Id, item.Senha);
 
             if (!connection.SendCommand(sql))
             {

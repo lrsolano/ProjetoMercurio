@@ -11,7 +11,7 @@ namespace Mercurio.Core
         public bool Ativo { get; set; }
         public string Nome { get; private set; }
         public Sensor Sensor { get; private set; }
-        public Local(int id, string nome, DateTime dataCriacao, Sensor sensor) : base("local", "IdLocal")
+        internal Local(int id, string nome, DateTime dataCriacao, Sensor sensor) : base("local", "IdLocal")
         {
             Id = id;
             Nome = nome;
@@ -23,7 +23,7 @@ namespace Mercurio.Core
             Nome = nome;
             Sensor = sensor;
         }
-        public Local(int id) : base("local", "IdLocal")
+        internal Local(int id) : base("local", "IdLocal")
         {
             if (base.Exists(id))
             {
@@ -48,6 +48,12 @@ namespace Mercurio.Core
             List<Local> i = item.FindAll();
             return i;
         }
+        public static Local FindById(long id)
+        {
+            LocalManipulation item = new LocalManipulation();
+            Local i = item.FindByID(id);
+            return i;
+        }
         public void CreateLocal()
         {
             if (Id != 0)
@@ -56,7 +62,7 @@ namespace Mercurio.Core
             }
             
             LocalManipulation item = new LocalManipulation();
-            if (item.FindByName(Nome) == null)
+            if (item.FindByName(Nome) != null)
             {
                 throw new MercurioCoreException("Local já criado no Banco de Dados");
             }

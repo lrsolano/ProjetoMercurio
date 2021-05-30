@@ -32,7 +32,7 @@ namespace Mercurio.Core
             Usuario = usuario;
             Items = new List<Item>();
         }
-        public Pedido(int id) : base("pedido", "IdPedido")
+        internal Pedido(int id) : base("pedido", "IdPedido")
         {
             PedidoManipulation item = new PedidoManipulation();
             Pedido i = item.FindByID(id);
@@ -47,6 +47,12 @@ namespace Mercurio.Core
         {
             PedidoManipulation item = new PedidoManipulation();
             List<Pedido> i = item.FindAll();
+            return i;
+        }
+        public static Pedido FindById(long id)
+        {
+            PedidoManipulation item = new PedidoManipulation();
+            Pedido i = item.FindByID(id);
             return i;
         }
         public void CreatePedido()

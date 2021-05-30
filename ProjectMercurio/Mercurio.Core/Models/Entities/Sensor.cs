@@ -59,6 +59,12 @@ namespace Mercurio.Core
             List<Sensor> i = item.FindAll();
             return i;
         }
+        public static Sensor FindById(long id)
+        {
+            SensorManipulation item = new SensorManipulation();
+            Sensor i = item.FindByID(id);
+            return i;
+        }
         public void ChangeType(int id)
         {
             SensorManipulation manipulation = new SensorManipulation();
@@ -79,7 +85,7 @@ namespace Mercurio.Core
             }
 
             SensorManipulation item = new SensorManipulation();
-            if (item.FindByName(Nome) == null)
+            if (item.FindByName(Nome) != null)
             {
                 throw new MercurioCoreException("Sensor já criado no Banco de Dados");
             }

@@ -9,7 +9,7 @@ namespace Mercurio.Core
     public class Direcao : CommonColumns
     {
         public string Movimento { get; private set; }
-        public Direcao(int id) : base("direcao", "IdDirecao")
+        internal Direcao(int id) : base("direcao", "IdDirecao")
         {
             if (base.Exists(id))
             {
@@ -21,7 +21,7 @@ namespace Mercurio.Core
             }
 
         }
-        public Direcao(int idDirecao, string movimento) : base("direcao", "IdDirecao")
+        internal Direcao(int idDirecao, string movimento) : base("direcao", "IdDirecao")
         {
             Id = idDirecao;
             Movimento = movimento;
@@ -44,6 +44,12 @@ namespace Mercurio.Core
         {
             DirecaoManipulation item = new DirecaoManipulation();
             List<Direcao> i = item.FindAll();
+            return i;
+        }
+        public static Direcao FindById(long id)
+        {
+            DirecaoManipulation item = new DirecaoManipulation();
+            Direcao i = item.FindByID(id);
             return i;
         }
         public override bool Equals(object obj)
