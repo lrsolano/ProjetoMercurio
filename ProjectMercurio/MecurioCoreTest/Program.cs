@@ -12,6 +12,12 @@ namespace MecurioCoreTest
             try
             {
 
+                Usuario user = Usuario.FindByName("Matheus");
+
+                PasswordChange pw = new PasswordChange("password", "password", "batatinha");
+
+                user.ChangePassword(pw);
+
 
             }
             catch(MercurioCoreException ex)

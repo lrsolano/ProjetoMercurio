@@ -80,10 +80,30 @@ CREATE TABLE PedidoXItem(
 	FOREIGN KEY (IdItem) REFERENCES item(IdItem)
 );
 
+CREATE TABLE grupo(
+	IdGrupo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	Nome VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE GrupoXUsuario(
+	IdGrupoXUsuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	IdGrupo INT NOT NULL,
+	IdUsuario INT NOT NULL,
+	FOREIGN KEY (IdUsuario) REFERENCES usuario(IdUsuario),
+	FOREIGN KEY (IdGrupo) REFERENCES grupo(IdGrupo)
+);
+
+
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('Sensor 1',now(),true,1,'Ida');
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 2',now(),false,1,'Ida',1);
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 3',now(),false,3,'Ida',2);
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 4',now(),false,3,'Ida',3);
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 5',now(),false,2,'Ida',3);
 INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('Sensor 6',now(),false,1,'Ida',3);
-	
+
+
+INSERT INTO projetomercurio.grupo(Nome) VALUES ('SuperUser');
+INSERT INTO projetomercurio.grupo(Nome) VALUES ('Gerente');
+INSERT INTO projetomercurio.grupo(Nome) VALUES ('Estoque');
+INSERT INTO projetomercurio.grupo(Nome) VALUES ('Ponta');
+INSERT INTO projetomercurio.grupo(Nome) VALUES ('Comum');

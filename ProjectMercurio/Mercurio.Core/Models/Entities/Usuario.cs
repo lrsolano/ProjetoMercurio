@@ -12,6 +12,7 @@ namespace Mercurio.Core
         public string Nome { get; private set; }
         public int Idade { get; private set; }
         public bool Ativo { get ; set ; }
+        public List<Grupo> Grupos { get; set; }
         internal string Senha { get; private set; }
         internal Usuario(int id, string nome, DateTime dataCriacao, int idade, string senha) : base("usuario", "IdUsuario")
         {
@@ -21,6 +22,7 @@ namespace Mercurio.Core
             DataCriacao = dataCriacao;
             Idade = idade;
             Senha = senha;
+            LoadGrupo();
 
         }
         public Usuario(string nome, int idade) : base("usuario", "IdUsuario")
@@ -28,6 +30,7 @@ namespace Mercurio.Core
             Nome = nome;
             Idade = idade;
             Senha = string.Empty;
+            Grupos = new List<Grupo>();
         }
         internal Usuario(int id) : base("usuario", "IdUsuario")
         {
@@ -40,6 +43,7 @@ namespace Mercurio.Core
                 base.DataCriacao = i.DataCriacao;
                 Idade = i.Idade;
                 Senha = i.Senha;
+                LoadGrupo();
             }
         }
         public static Usuario FindByName(string nome)
@@ -70,14 +74,23 @@ namespace Mercurio.Core
             {
                 throw new MercurioCoreException("Usuario já criado no Banco de Dados");
             }
+            if (Grupos.Count == 0)
+            {
+                throw new MercurioCoreException("Adicione Grupos de Usuarios");
+            }
             UsuarioManipulation item = new UsuarioManipulation();
             if (item.FindByName(Nome) != null)
             {
                 throw new MercurioCoreException("Usuario já criado no Banco de Dados");
             }
             Usuario novo = item.Create(this);
-
+            foreach(Grupo g in Grupos)
+            {
+                g.AddGrupo((int)novo.Id);
+            }
             Id = novo.Id;
+
+            
         }
         public void UpdateUsuario()
         {
@@ -85,11 +98,15 @@ namespace Mercurio.Core
             {
                 throw new MercurioCoreException("Defina a Senha");
             }
-            UsuarioManipulation item = new UsuarioManipulation();
-
-            if (item.FindByName(Nome) == null)
+            if (base.Id == 0)
             {
-                throw new MercurioCoreException("Sensor já criado no Banco de Dados");
+                throw new MercurioCoreException("Usuario não criado no Banco de Dados");
+            }
+            UsuarioManipulation item = new UsuarioManipulation();
+            List<Grupo> naoSalvo = Grupos.FindAll(g => g.Salvo == false);
+            foreach(Grupo g in naoSalvo)
+            {
+                g.AddGrupo((int)Id);
             }
             item.Update(this);
 
@@ -99,6 +116,12 @@ namespace Mercurio.Core
             UsuarioManipulation item = new UsuarioManipulation();
             if (item.CanDelete(Id))
             {
+
+                foreach(Grupo g in Grupos)
+                {
+                    g.RemoveGrupo((int)Id);
+                }
+
                 item.Delete(this.Id);
             }
             else
@@ -121,6 +144,15 @@ namespace Mercurio.Core
             string password = Password.ComputeHash(senha, "SHA256");
             Senha = password;
         }
+        public void ChangeName(string nome)
+        {
+            UsuarioManipulation item = new UsuarioManipulation();
+            if (item.FindByName(nome) != null)
+            {
+                throw new MercurioCoreException("Usuario já criado no Banco de Dados");
+            }
+            Nome = nome;
+        }
         public void ChangePassword(PasswordChange passwordChange) 
         {
             string oldPassword = Password.ComputeHash(passwordChange.SenhaAntiga, "SHA256");
@@ -131,6 +163,36 @@ namespace Mercurio.Core
             AddSenha(passwordChange.NovaSenha);
             UpdateUsuario();
         }
+        internal void LoadGrupo()
+        {
+            Grupos = Grupo.FindAll((int)Id);
+            foreach (Grupo g in Grupos)
+            {
+                g.Salvo = true;
+            }
+        }
+        public void AddGrupo(Grupo grupo)
+        {
+            if (Grupos.Exists(g => g.Equals(grupo)))
+            {
+                throw new MercurioCoreException("Grupo já existe no usuario");
+            }
+            Grupos.Add(grupo);
+        }
+        public void RemoveGrupo(Grupo grupo)
+        {
+            if (!Grupos.Exists(g => g.Equals(grupo)))
+            {
+                throw new MercurioCoreException("Grupo não existe no usuario");
+            }
+
+            Grupo g = Grupos.Find(g => g.Equals(grupo));
+            g.RemoveGrupo((int)Id);
+            Grupos.Remove(g);
+        }
+
+
+
         public override bool Equals(object obj)
         {
             var item = obj as Usuario;
@@ -146,6 +208,7 @@ namespace Mercurio.Core
         {
             return this.Id.GetHashCode();
         }
+
 
     }
 }
