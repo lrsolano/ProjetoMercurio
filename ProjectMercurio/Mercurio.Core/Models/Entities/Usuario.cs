@@ -25,6 +25,16 @@ namespace Mercurio.Core
             LoadGrupo();
 
         }
+        public Usuario(int id, string nome, DateTime dataCriacao, int idade) : base("usuario", "IdUsuario")
+        {
+            base.Id = id;
+            base.DataCriacao = dataCriacao;
+            Nome = nome;
+            DataCriacao = dataCriacao;
+            Idade = idade;
+            LoadGrupo();
+
+        }
         public Usuario(string nome, int idade) : base("usuario", "IdUsuario")
         {
             Nome = nome;
@@ -152,6 +162,10 @@ namespace Mercurio.Core
                 throw new MercurioCoreException("Usuario já criado no Banco de Dados");
             }
             Nome = nome;
+        }
+        public void ChangeIdade(int idade)
+        {
+            Idade = idade;
         }
         public void ChangePassword(PasswordChange passwordChange) 
         {

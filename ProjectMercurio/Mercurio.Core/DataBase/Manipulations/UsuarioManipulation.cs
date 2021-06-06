@@ -34,7 +34,7 @@ namespace Mercurio.Core
         public List<Usuario> FindAll()
         {
             List<Usuario> items = new List<Usuario>();
-            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha Idade FROM projetomercurio.usuario");
+            string sql = string.Format("SELECT IdUsuario, Nome, DataCriacao, Senha, Idade FROM projetomercurio.usuario");
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
