@@ -20,8 +20,6 @@ namespace Mercurio.API
             if (origin == null) return null;
             Usuario usuario = Usuario.FindById(origin.Id);
             if (usuario == null) return null;
-            usuario.ChangeName(origin.Nome);
-            usuario.ChangeIdade(origin.Idade);
             return usuario;
         }
 

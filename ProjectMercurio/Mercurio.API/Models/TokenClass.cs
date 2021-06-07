@@ -8,9 +8,7 @@ namespace Mercurio.API
 {
     public class TokenClass
     {
-        [DisplayName("token")]
         public string Token { get; set; }
-        [DisplayName("expire_in")]
         public long ExpireIn { get; set; }
 
         public TokenClass(string token, double expireIn)

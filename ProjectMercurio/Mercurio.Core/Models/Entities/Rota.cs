@@ -117,7 +117,7 @@ namespace Mercurio.Core
                 }
 
                 anterior = atual;
-                atual = sensores.Find(item => atual.SensorAnterior.Equals(item));
+                atual = sensores.Find(item => atual.SensorAnterior == item.Id);
                 direcaoAnterior = anterior.Direcao.Movimento;
             }
 

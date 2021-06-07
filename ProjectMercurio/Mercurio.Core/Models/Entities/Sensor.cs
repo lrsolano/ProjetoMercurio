@@ -14,7 +14,7 @@ namespace Mercurio.Core
         public Direcao Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; private set; }
         public bool Ativo { get; set; }
-        public Sensor(int id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        public Sensor(long id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
         {
             Id = id;
             Nome = nome;

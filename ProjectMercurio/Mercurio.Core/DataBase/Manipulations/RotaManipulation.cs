@@ -39,7 +39,7 @@ namespace Mercurio.Core
         public List<Rota> FindAll()
         {
             List<Rota> items = new List<Rota>();
-            string sql = string.Format("SELECT IdRota FROM projetomercurio.rota");
+            string sql = string.Format("SELECT IdRota, IdSensorInicial, IdSensorFinal, Rota FROM projetomercurio.rota");
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
@@ -62,7 +62,7 @@ namespace Mercurio.Core
 
         public Rota FindByID(long id)
         {
-            string sql = string.Format("SELECT IdRota, IdSensorInicial, IdSensorFinal, Rota FROM projetomercurio.rota");
+            string sql = string.Format("SELECT IdRota, IdSensorInicial, IdSensorFinal, Rota FROM projetomercurio.rota WHERE IdRota={0} ",id);
             MySqlDataReader result = connection.SendQuery(sql);
             Rota rota = null;
             if (result.HasRows)

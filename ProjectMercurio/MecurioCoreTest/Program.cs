@@ -12,12 +12,13 @@ namespace MecurioCoreTest
             try
             {
 
-                Usuario user = Usuario.FindByName("Matheus");
+                Pedido p = new Pedido(Usuario.FindByName("leonardo"));
+                Item martelo = new Item("Martelo");
 
-                PasswordChange pw = new PasswordChange("password", "password", "batatinha");
+                p.AddItem(martelo, 1);
+                p.SetRota(Sensor.FindById(1), Sensor.FindById(5));
 
-                user.ChangePassword(pw);
-
+                p.CreatePedido();
 
             }
             catch(MercurioCoreException ex)

@@ -99,9 +99,22 @@ namespace Mercurio.Core
                     i.CreateItem();
                 }
             }
+            if (Rota.Id == 0)
+            {
+                Rota.CreateRota();
+                
+            }
             PedidoManipulation item = new PedidoManipulation();
 
             item.Update(this);
+
+            foreach(Item i in Items)
+            {
+                if (i.RemoveItem)
+                {
+                    Items.Remove(i);
+                }
+            }
 
         }
         public void DeletePedido()
@@ -118,6 +131,10 @@ namespace Mercurio.Core
                 item.Quantidade = quantidade;
                 Items.Add(item);
             }
+            else
+            {
+                throw new MercurioCoreException("Item informado já está no pedido");
+            }
 
         }
         public void SetRota(Sensor inicial, Sensor final)
@@ -132,11 +149,19 @@ namespace Mercurio.Core
         public void RemoveItem(Item item)
         {
             Item i = Items.Find(it => it.Id == item.Id);
+            if(i == null)
+            {
+                throw new MercurioCoreException("Item não foi encontrado no Pedido");
+            }
             i.RemoveItem = true;
         }
         public void ChangeItem(Item item, int quantidade)
         {
             Item i = Items.Find(it => it.Id == item.Id);
+            if (i == null)
+            {
+                throw new MercurioCoreException("Item não foi encontrado no Pedido");
+            }
             i.ChangeItem(Convert.ToInt32(item.Id));
             i.Quantidade = quantidade;
         }

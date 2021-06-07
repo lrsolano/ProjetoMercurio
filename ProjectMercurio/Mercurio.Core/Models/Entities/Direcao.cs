@@ -8,7 +8,7 @@ namespace Mercurio.Core
 {
     public class Direcao : CommonColumns
     {
-        public string Movimento { get; private set; }
+        public string Movimento { get; set; }
         internal Direcao(int id) : base("direcao", "IdDirecao")
         {
             if (base.Exists(id))

@@ -8,9 +8,9 @@ namespace Mercurio.Core
 {
     public class PasswordChange
     {
-        internal string NovaSenha {  get; private set; }
-        internal string ConfirmarSenha { get; private set; }
-        internal string SenhaAntiga { get; set; }
+        public string NovaSenha {  get; private set; }
+        public string ConfirmarSenha { get; private set; }
+        public string SenhaAntiga { get; set; }
 
         public PasswordChange(string novaSenha, string confirmarSenha, string senhaAntiga)
         {

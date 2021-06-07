@@ -10,7 +10,7 @@ namespace Mercurio.Core
     {
         internal int IdPedidoxItem { get; set; }
         public string Nome { get; private set; }
-        internal int Quantidade { get; set; }
+        public int Quantidade { get; internal set; }
         public bool Ativo { get; set ; }
         internal bool RemoveItem { get; set; }
         internal Item(int id, string nome, DateTime dataCriacao) : base("item", "IdItem")
@@ -50,7 +50,7 @@ namespace Mercurio.Core
             List<Item> i = item.FindAll();
             return i;
         }
-        public static Item DindById(long id)
+        public static Item FindById(long id)
         {
             ItemManipulation item = new ItemManipulation();
             Item i = item.FindByID(id);
@@ -90,6 +90,10 @@ namespace Mercurio.Core
                 throw new MercurioCoreException("Item em uso.");
             }
 
+        }
+        public void AddQuantidade(int quantidade)
+        {
+            Quantidade = quantidade;
         }
         public void ChangeItem(int id)
         {

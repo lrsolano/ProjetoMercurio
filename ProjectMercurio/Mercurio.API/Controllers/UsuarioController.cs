@@ -40,6 +40,7 @@ namespace Mercurio.API.Controllers
         [ProducesResponseType(typeof(UsuarioV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
         public IActionResult Get(long id)
         {
             try
@@ -61,7 +62,11 @@ namespace Mercurio.API.Controllers
             }
             catch (DBConnectionException ex)
             {
-                return StatusCode(500, new ErrorClass(400, ex.Message, DateTime.Now));
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
             }
 
         }

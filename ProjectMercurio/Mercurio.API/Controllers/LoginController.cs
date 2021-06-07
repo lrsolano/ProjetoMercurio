@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mercurio.API.Controllers
+namespace Mercurio.API
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -49,6 +49,73 @@ namespace Mercurio.API.Controllers
 
 
         }
+
+        [HttpGet("validate")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ValidateClass), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult Validate()
+        {
+            try
+            {
+                bool autenticado = User.Identity.IsAuthenticated;
+                string usuario = "";
+                if (autenticado)
+                {
+                    usuario = User.Identity.Name;
+                }
+                return Ok(new ValidateClass(autenticado, usuario));
+
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+
+
+
+        }
+
+        [HttpPut("changePassword")]
+        [AllowAnonymous]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult ChangePassword([FromBody] PasswordChange pw)
+        {
+            try
+            {
+                Usuario usuario = Usuario.FindByName(User.Identity.Name);
+                if(usuario == null)
+                {
+                    return StatusCode(404, new ErrorClass(404, "Usuario não encontrado", DateTime.Now));
+                }
+                usuario.ChangePassword(pw);
+                return NoContent();
+
+                
+
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+
+
+
+        }
+
+
+
 
         private object GerarTokenJwt(Usuario usuario)
         {
