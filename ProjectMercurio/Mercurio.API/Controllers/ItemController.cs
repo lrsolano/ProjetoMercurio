@@ -22,18 +22,33 @@ namespace Mercurio.API
             _config = configuration;
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(List<ItemV>), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
         public IActionResult GetAll()
         {
-            return Ok(_converter.Parser(Item.FindAll()));
+            try
+            {
+                return Ok(_converter.Parser(Item.FindAll()));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(ItemV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
         public IActionResult Get(long id)
         {
             try
@@ -55,9 +70,31 @@ namespace Mercurio.API
             }
             catch (DBConnectionException ex)
             {
-                return StatusCode(500, new ErrorClass(400, ex.Message, DateTime.Now));
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
             }
 
+        }
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(ItemV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult CreateItem([FromBody] ItemV item)
+        {
+            try
+            {
+                Item i = _converter.Parser(item);
+                i.CreateItem();
+                return Ok(_converter.Parser(i));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
         }
     }
 }

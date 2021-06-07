@@ -22,7 +22,7 @@ namespace Mercurio.API
             _config = configuration;
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(List<RotaV>), 200)]
         public IActionResult GetAll()
         {
@@ -30,7 +30,7 @@ namespace Mercurio.API
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(RotaV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]

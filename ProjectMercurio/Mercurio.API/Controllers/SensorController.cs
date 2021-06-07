@@ -22,7 +22,7 @@ namespace Mercurio.API.Controllers
             _config = configuration;
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(List<SensorV>), 200)]
         public IActionResult GetAll()
         {
@@ -31,7 +31,7 @@ namespace Mercurio.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(SensorV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]

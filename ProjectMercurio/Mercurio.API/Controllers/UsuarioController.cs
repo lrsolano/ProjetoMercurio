@@ -71,7 +71,94 @@ namespace Mercurio.API.Controllers
 
         }
 
-        
+        [HttpPost("create")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult CreateUser([FromBody] CreateUsuarioClass usuarioClass)
+        {
+            try
+            {
+                if(usuarioClass.Grupos.Count == 0 || usuarioClass.Idade == 0 || usuarioClass.Nome == "" || usuarioClass.Senha == "")
+                {
+                    return StatusCode(400, new ErrorClass(400, "Insira todas Informações", DateTime.Now));
+                }
+                Usuario u = new Usuario(usuarioClass.Nome, usuarioClass.Idade);
+                u.AddSenha(usuarioClass.Senha);
+                foreach(GrupoV g in usuarioClass.Grupos)
+                {
+                    if(g.Nome != "")
+                    {
+                        Grupo grupo = Grupo.FindByName(g.Nome);
+                        if(grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.AddGrupo(grupo);
+                    }
+                    else
+                    {
+                        Grupo grupo = Grupo.FindById((int)g.Id);
+                        if (grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.AddGrupo(grupo);
+                    }
+                }
+                u.CreateUsuario();
+                return Ok(_converter.Parser(u));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
+
+
+        [HttpDelete("{idUsuario}")]
+        [Authorize(Roles = "SuperUser")]
+        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult DeleteUser(long idUsuario)
+        {
+            try
+            {
+                Usuario u = Usuario.FindById(idUsuario);
+                if(u == null)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Usuario não Encontrado", DateTime.Now));
+                }
+                u.DeleteUsuario();
+                return NoContent();
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
 
 
     }

@@ -82,7 +82,7 @@ namespace Mercurio.API
         }
 
         [HttpPut("changePassword")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
         [ProducesResponseType(typeof(ErrorClass), 500)]

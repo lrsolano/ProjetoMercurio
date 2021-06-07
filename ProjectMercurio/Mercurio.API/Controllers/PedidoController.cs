@@ -24,7 +24,7 @@ namespace Mercurio.API
             _config = configuration;
         }
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "SuperUser")]
         [ProducesResponseType(typeof(List<PedidoV>), 200)]
         public IActionResult GetAll()
         {
@@ -32,7 +32,7 @@ namespace Mercurio.API
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(List<PedidoV>), 200)]
         public IActionResult GetById(long id)
         {
@@ -53,7 +53,7 @@ namespace Mercurio.API
 
         [HttpPost]
         [Route("create")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(PedidoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
@@ -83,7 +83,7 @@ namespace Mercurio.API
 
         [HttpDelete]
         [Route("delete/{id}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
@@ -117,7 +117,7 @@ namespace Mercurio.API
 
         [HttpPut]
         [Route("addItem/{idPedido}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(PedidoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
@@ -158,7 +158,7 @@ namespace Mercurio.API
         }
         [HttpDelete]
         [Route("removeItem/{idPedido}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(PedidoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
@@ -200,7 +200,7 @@ namespace Mercurio.API
 
         [HttpPut]
         [Route("changeItem/{idPedido}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(PedidoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
@@ -241,7 +241,7 @@ namespace Mercurio.API
         }
         [HttpPut]
         [Route("changeRota/{idPedido}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(PedidoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]

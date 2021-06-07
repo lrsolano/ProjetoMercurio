@@ -12,6 +12,11 @@ namespace MecurioCoreTest
             try
             {
 
+                Usuario u = new Usuario("teste",22);
+                u.AddSenha("teste");
+                u.AddGrupo(Grupo.FindById(1));
+                u.CreateUsuario();
+
                 Pedido p = new Pedido(Usuario.FindByName("leonardo"));
                 Item martelo = new Item("Martelo");
 
