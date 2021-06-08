@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Mercurio.Core
 {
@@ -17,7 +18,13 @@ namespace Mercurio.Core
         {
             string nomeFormatado = nomeDoModulo.Replace(" ", "");
             this.nomeDoModulo = nomeFormatado;
-            string directory = @"C:\_Projetos\_LOGS\MercurioCore";
+            string directory = Directory.GetCurrentDirectory();
+            directory = directory + @"\LOGS";
+            if (!Directory.Exists(directory))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(directory);
+                return;
+            }
             this.nomeDoArquivo = Path.Combine(directory, string.Format("{0}_{1}.txt", this.nomeDoModulo, DateTime.Now.ToString("dd-MM-yyyy")));
             logNivel = level;
 
