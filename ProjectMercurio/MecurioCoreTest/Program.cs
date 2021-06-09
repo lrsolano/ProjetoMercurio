@@ -11,19 +11,8 @@ namespace MecurioCoreTest
         {
             try
             {
-
-                Usuario u = new Usuario("teste",22);
-                u.AddSenha("teste");
-                u.AddGrupo(Grupo.FindById(1));
-                u.CreateUsuario();
-
-                Pedido p = new Pedido(Usuario.FindByName("leonardo"));
-                Item martelo = new Item("Martelo");
-
-                p.AddItem(martelo, 1);
-                p.SetRota(Sensor.FindById(1), Sensor.FindById(5));
-
-                p.CreatePedido();
+                Sensor s = Sensor.FindById(7);
+                Console.WriteLine(s.DataCriacao);
 
             }
             catch(MercurioCoreException ex)

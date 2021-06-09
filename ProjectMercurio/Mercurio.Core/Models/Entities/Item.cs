@@ -91,6 +91,15 @@ namespace Mercurio.Core
             }
 
         }
+        public void ChangeName(string nome)
+        {
+            ItemManipulation item = new ItemManipulation();
+            if (item.FindByName(nome) != null)
+            {
+                throw new MercurioCoreException("Item já criado no Banco de Dados");
+            }
+            Nome = nome;
+        }
         public void AddQuantidade(int quantidade)
         {
             Quantidade = quantidade;

@@ -14,7 +14,8 @@ namespace Mercurio.Core
         public Direcao Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; private set; }
         public bool Ativo { get; set; }
-        public Sensor(long id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        private bool AtualizarTodas { get; set; }
+        internal Sensor(long id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
         {
             Id = id;
             Nome = nome;
@@ -32,7 +33,7 @@ namespace Mercurio.Core
             Direcao = direcao;
             DirecaoRota = direcaoRota;
         }
-        public Sensor(int id) : base("sensor", "IdSensor")
+        internal Sensor(int id) : base("sensor", "IdSensor")
         {
             if (base.Exists(id))
             {
@@ -89,15 +90,23 @@ namespace Mercurio.Core
             {
                 throw new MercurioCoreException("Sensor já criado no Banco de Dados");
             }
+            if(item.FindByID(SensorAnterior) == null)
+            {
+                throw new MercurioCoreException("Sensor anterior não encontrado no Banco de Dados");
+            }
             Sensor novo = item.Create(this);
-
+            DataCriacao = novo.DataCriacao;
             Id = novo.Id;
         }
         public void UpdateSensor()
         {
             SensorManipulation item = new SensorManipulation();
-
+            
             item.Update(this);
+            if (AtualizarTodas)
+            {
+                UpdateTodasRotas();
+            }
 
         }
         public void DeleteSensor()
@@ -110,6 +119,44 @@ namespace Mercurio.Core
             else
             {
                 throw new MercurioCoreException("Sensor em uso.");
+            }
+
+        }
+        public void ChangeName(string nome)
+        {
+            SensorManipulation item = new SensorManipulation();
+            if (item.FindByName(nome) != null)
+            {
+                throw new MercurioCoreException("Sensor já criado no Banco de Dados");
+            }
+            Nome = nome;
+        }
+        public void ChangeSensorAnterior(int sensorAnterior)
+        {
+            SensorManipulation item = new SensorManipulation();
+            if (item.FindByID(sensorAnterior) == null)
+            {
+                throw new MercurioCoreException("Sensor anterior não encontrado no Banco de Dados");
+            }
+            SensorAnterior = sensorAnterior;
+            AtualizarTodas = true;
+        }
+        public void ChangeDirecao(Direcao direcao)
+        {
+            Direcao = direcao;
+            AtualizarTodas = true;
+        }
+        public void UpdateTodasRotas()
+        {
+            var rotas = Rota.FindAll();
+            string tracado = string.Empty;
+            foreach(Rota r in rotas)
+            {
+                tracado = r.Tracado;
+                if(tracado != r.GerarRota())
+                {
+                    r.UpdateItem();
+                }
             }
 
         }

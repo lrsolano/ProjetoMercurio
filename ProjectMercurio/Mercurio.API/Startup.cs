@@ -23,6 +23,10 @@ namespace Mercurio.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string issuer = Configuration["Jwt:Issuer"];
+            string audience = Configuration["Jwt:Audience"];
+            string key = Configuration["Jwt:Key"];
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             services.AddAuthentication
                                     (JwtBearerDefaults.AuthenticationScheme)
                                     .AddJwtBearer(options =>
@@ -33,10 +37,9 @@ namespace Mercurio.API
                                             ValidateAudience = true,
                                             ValidateLifetime = true,
                                             ValidateIssuerSigningKey = true,
-                                            ValidIssuer = Configuration["Jwt:Issuer"],
-                                            ValidAudience = Configuration["Jwt:Audience"],
-                                            IssuerSigningKey = new SymmetricSecurityKey
-                                        (Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                                            ValidIssuer = issuer,
+                                            ValidAudience = audience,
+                                            IssuerSigningKey = signingKey
                                         };
                                     });
             services.AddControllers();

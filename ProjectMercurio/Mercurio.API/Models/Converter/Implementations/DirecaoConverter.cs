@@ -17,7 +17,16 @@ namespace Mercurio.API
         public Direcao Parser(DirecaoV origin)
         {
             if (origin == null) return null;
-            Direcao direcao = Direcao.FindById(origin.Id);
+            Direcao direcao = null;
+            if (origin.Id != 0)
+            {
+                direcao = Direcao.FindById(origin.Id);
+            }
+            else
+            {
+                direcao = Direcao.FindByName(origin.Movimento);
+            }
+            
             return direcao;
         }
 

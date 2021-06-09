@@ -87,27 +87,35 @@ namespace Mercurio.API.Controllers
                 }
                 Usuario u = new Usuario(usuarioClass.Nome, usuarioClass.Idade);
                 u.AddSenha(usuarioClass.Senha);
-                foreach(GrupoV g in usuarioClass.Grupos)
+                if (User.Identity.IsAuthenticated & User.IsInRole("SuperUser"))
                 {
-                    if(g.Nome != "")
+                    foreach (GrupoV g in usuarioClass.Grupos)
                     {
-                        Grupo grupo = Grupo.FindByName(g.Nome);
-                        if(grupo == null)
+                        if (g.Nome != "")
                         {
-                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                            Grupo grupo = Grupo.FindByName(g.Nome);
+                            if (grupo == null)
+                            {
+                                return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                            }
+                            u.AddGrupo(grupo);
                         }
-                        u.AddGrupo(grupo);
-                    }
-                    else
-                    {
-                        Grupo grupo = Grupo.FindById((int)g.Id);
-                        if (grupo == null)
+                        else
                         {
-                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                            Grupo grupo = Grupo.FindById((int)g.Id);
+                            if (grupo == null)
+                            {
+                                return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                            }
+                            u.AddGrupo(grupo);
                         }
-                        u.AddGrupo(grupo);
                     }
                 }
+                else
+                {
+                    u.AddGrupo(Grupo.FindByName("Comum"));
+                }
+                
                 u.CreateUsuario();
                 return Ok(_converter.Parser(u));
             }
@@ -129,7 +137,7 @@ namespace Mercurio.API.Controllers
 
         [HttpDelete("{idUsuario}")]
         [Authorize(Roles = "SuperUser")]
-        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
         [ProducesResponseType(typeof(ErrorClass), 500)]
@@ -144,6 +152,151 @@ namespace Mercurio.API.Controllers
                 }
                 u.DeleteUsuario();
                 return NoContent();
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
+
+        [HttpPut("addGrupo/{idUsuario}")]
+        [Authorize(Roles = "SuperUser")]
+        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult AddGrupo([FromBody] List<GrupoV> grupoV, long idUsuario)
+        {
+            try
+            {
+                Usuario u = Usuario.FindById(idUsuario);
+                if (u == null)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Usuario não Encontrado", DateTime.Now));
+                }
+                foreach (GrupoV g in grupoV)
+                {
+                    if (g.Nome != "")
+                    {
+                        Grupo grupo = Grupo.FindByName(g.Nome);
+                        if (grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.AddGrupo(grupo);
+                    }
+                    else
+                    {
+                        Grupo grupo = Grupo.FindById((int)g.Id);
+                        if (grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.AddGrupo(grupo);
+                    }
+                }
+                u.UpdateUsuario();
+
+                return Ok(_converter.Parser(u));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
+        [HttpPut("removeGrupo/{idUsuario}")]
+        [Authorize(Roles = "SuperUser")]
+        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult RemoveGrupo([FromBody] List<GrupoV> grupoV, long idUsuario)
+        {
+            try
+            {
+                Usuario u = Usuario.FindById(idUsuario);
+                if (u == null)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Usuario não Encontrado", DateTime.Now));
+                }
+                foreach (GrupoV g in grupoV)
+                {
+                    if (g.Nome != "")
+                    {
+                        Grupo grupo = Grupo.FindByName(g.Nome);
+                        if (grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.RemoveGrupo(grupo);
+                    }
+                    else
+                    {
+                        Grupo grupo = Grupo.FindById((int)g.Id);
+                        if (grupo == null)
+                        {
+                            return StatusCode(404, new ErrorClass(404, "Grupo não encontrado", DateTime.Now));
+                        }
+                        u.RemoveGrupo(grupo);
+                    }
+                }
+                u.UpdateUsuario();
+
+                return Ok(_converter.Parser(u));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
+
+        [HttpPut("updateInfos/{idUsuario}")]
+        [Authorize(Roles = "SuperUser")]
+        [ProducesResponseType(typeof(UsuarioV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult Update([FromBody] CreateUsuarioClass usuarioClass, long idUsuario)
+        {
+            try
+            {
+                Usuario u = Usuario.FindById(idUsuario);
+                if (u == null)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Usuario não Encontrado", DateTime.Now));
+                }
+                u.ChangeIdade(usuarioClass.Idade);
+                u.ChangeName(usuarioClass.Nome);
+                u.UpdateUsuario();
+
+                return Ok(_converter.Parser(u));
             }
             catch (MercurioCoreException ex)
             {

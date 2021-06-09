@@ -87,7 +87,7 @@ namespace Mercurio.Core
 
         public Item Update(Item item)
         {
-            string sql = string.Format("UPDATE projetomercurio.item SET  Nome = '{1}' WHERE IdItem = {0}", item.Nome, item.Id);
+            string sql = string.Format("UPDATE projetomercurio.item SET  Nome = '{0}' WHERE IdItem = {1}", item.Nome, item.Id);
 
             if (!connection.SendCommand(sql))
             {

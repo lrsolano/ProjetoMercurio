@@ -189,7 +189,7 @@ namespace Mercurio.Core
 
             }
 
-            string sql = string.Format("UPDATE projetomercurio.sensor SET  Nome = '{0}', Inicial = {1}, IdDirecao = {2}, DirecaoRota = '{3}'WHERE IdSensor = {4}", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
+            string sql = string.Format("UPDATE projetomercurio.sensor SET  Nome = '{0}', Inicial = {1}, IdDirecao = {2}, DirecaoRota = '{3}'WHERE IdSensor = {4};", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota,item.Id);
 
             if (!connection.SendCommand(sql))
             {

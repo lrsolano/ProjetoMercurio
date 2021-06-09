@@ -20,6 +20,14 @@ namespace Mercurio.Core
         }
         public Rota(Sensor sensorInicial, Sensor sensorFinal) : base("rota", "IdRota")
         {
+            if(sensorInicial.Id == 0)
+            {
+                throw new MercurioCoreException("Sensor não criado no Banco de Dados");
+            }
+            if (sensorFinal.Id == 0)
+            {
+                throw new MercurioCoreException("Sensor não criado no Banco de Dados");
+            }
             SensorInicial = sensorInicial;
             SensorFinal = sensorFinal;
             GerarRota();

@@ -57,12 +57,12 @@ namespace Mercurio.API
                 {
                     return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
                 }
-                var usuario = _converter.Parser(Item.FindById(id));
-                if (usuario == null)
+                var item = _converter.Parser(Item.FindById(id));
+                if (item == null)
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                return StatusCode(200, usuario);
+                return StatusCode(200, item);
             }
             catch (MercurioCoreException ex)
             {
@@ -95,6 +95,75 @@ namespace Mercurio.API
             {
                 return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
             }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        [ProducesResponseType(typeof(ItemV), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult AtualizaNome([FromBody] ItemV itemV,long id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
+                }
+                var item = (Item.FindById(id));
+                if (item == null)
+                {
+                    return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
+                }
+                item.ChangeName(itemV.Nome);
+                item.UpdateItem();
+
+                return StatusCode(200, _converter.Parser(item));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult DeleteItem(long id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
+                }
+                var item = (Item.FindById(id));
+                if (item == null)
+                {
+                    return StatusCode(404, new ErrorClass(404, "Item não encontrado", DateTime.Now));
+                }
+                item.DeleteItem();
+
+                return NoContent();
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
+
         }
     }
 }

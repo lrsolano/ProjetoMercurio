@@ -42,12 +42,12 @@ namespace Mercurio.API
                 {
                     return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
                 }
-                var usuario = _converter.Parser(Rota.FindById(id));
-                if (usuario == null)
+                var rota = _converter.Parser(Rota.FindById(id));
+                if (rota == null)
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                return StatusCode(200, usuario);
+                return StatusCode(200, rota);
             }
             catch (MercurioCoreException ex)
             {

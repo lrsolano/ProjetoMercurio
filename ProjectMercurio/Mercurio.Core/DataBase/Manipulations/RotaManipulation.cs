@@ -100,7 +100,7 @@ namespace Mercurio.Core
 
         public Rota Update(Rota item)
         {
-            string sql = string.Format("UPDATE projetomercurio.rota SET  IdSensorInicial = {0}, IdSensorFinal = {1}, Rota = '{3}' WHERE IdRota = {4}", item.SensorInicial.Id, item.SensorFinal.Id, item.Tracado);
+            string sql = string.Format("UPDATE projetomercurio.rota SET  IdSensorInicial = {0}, IdSensorFinal = {1}, Rota = '{2}' WHERE IdRota = {3}", item.SensorInicial.Id, item.SensorFinal.Id, item.Tracado,item.Id);
 
             if (!connection.SendCommand(sql))
             {

@@ -17,9 +17,13 @@ namespace Mercurio.API
         }
         public Sensor Parser(SensorV origin)
         {
+            DirecaoConverter direcaoConverter = new DirecaoConverter();
             if (origin == null) return null;
             Sensor sensor = Sensor.FindById(origin.Id);
-            if (sensor == null) return null;
+            if (sensor == null)
+            {
+                sensor = new Sensor(origin.Nome, origin.Inicial, origin.SensorAnterior, direcaoConverter.Parser(origin.Direcao), origin.DirecaoRota);
+            }
             return sensor;
         }
 
