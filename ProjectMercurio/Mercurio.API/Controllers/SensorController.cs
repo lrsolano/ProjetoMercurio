@@ -122,7 +122,7 @@ namespace Mercurio.API.Controllers
         }
 
         [HttpPut("updateInfos/{idSensor}")]
-        [AllowAnonymous]
+        [Authorize]
         [ProducesResponseType(typeof(SensorV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
