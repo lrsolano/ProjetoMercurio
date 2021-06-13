@@ -31,11 +31,11 @@ namespace Mercurio.Core
             string sql = string.Empty;
             if (item.SensorAnterior == 0)
             {
-                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota) VALUES ('{0}',now(),{1},{2},'{3}');", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota);
+                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, HashNum) VALUES ('{0}',now(),{1},{2},'{3}',{4});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota,  item.Hash);
             }
             else
             {
-                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior) VALUES ('{0}',now(),{1},{2},'{3}',{4});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota, item.SensorAnterior);
+                sql = string.Format("INSERT INTO projetomercurio.sensor (Nome, DataCriacao, Inicial, IdDirecao, DirecaoRota, IdSensorAnterior, HashNum) VALUES ('{0}',now(),{1},{2},'{3}',{4},{5});", item.Nome, item.Inicial, item.Direcao.Id, direcaoRota, item.SensorAnterior, item.Hash);
             }
 
 
@@ -57,7 +57,7 @@ namespace Mercurio.Core
         public List<Sensor> FindAll()
         {
             List<Sensor> items = new List<Sensor>();
-            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM projetomercurio.sensor");
+            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota, HashNum FROM projetomercurio.sensor");
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
@@ -87,7 +87,7 @@ namespace Mercurio.Core
 
                     }
 
-                    Sensor item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota);
+                    Sensor item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota, result["HashNum"].ToString());
                     items.Add(item);
                 }
                 
@@ -99,7 +99,7 @@ namespace Mercurio.Core
         }
         public Sensor FindByID(long id)
         {
-            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
+            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota, HashNum FROM  projetomercurio.sensor WHERE IdSensor={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
             Sensor item = null;
             if (result.HasRows)
@@ -129,7 +129,7 @@ namespace Mercurio.Core
 
                 }
 
-                item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota);
+                item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota, result["HashNum"].ToString());
                 
                 
             }
@@ -138,7 +138,7 @@ namespace Mercurio.Core
         }
         public Sensor FindLastId()
         {
-            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota FROM  projetomercurio.sensor order by IdSensor desc limit 1 ");
+            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota, HashNum FROM  projetomercurio.sensor order by IdSensor desc limit 1 ");
             MySqlDataReader result = connection.SendQuery(sql);
             Sensor item = null;
             if (result.HasRows)
@@ -168,7 +168,7 @@ namespace Mercurio.Core
 
                 }
 
-                item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota);
+                item = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor, direcao, rota, result["HashNum"].ToString());
                 
                 
             }
@@ -201,7 +201,7 @@ namespace Mercurio.Core
         public Sensor FindByName(string nome)
         {
             Sensor sensor = null;
-            string sql = string.Format("SELECT IdSensor FROM projetomercurio.sensor WHERE Nome = '{0}'", nome);
+            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota, HashNum FROM  projetomercurio.sensor WHERE Nome = '{0}'", nome);
             MySqlDataReader result = connection.SendQuery(sql);
             if (result.HasRows)
             {
@@ -231,11 +231,53 @@ namespace Mercurio.Core
 
                     }
 
-                    sensor = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor1, direcao, rota);
+                    sensor = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor1, direcao, rota, result["HashNum"].ToString());
                 }
                 
 
                 
+            }
+            result.Close();
+            return sensor;
+        }
+        public Sensor FindByHash(string hash)
+        {
+            Sensor sensor = null;
+            string sql = string.Format("SELECT IdSensor, Nome, DataCriacao, Inicial, IdSensorAnterior, IdDirecao, DirecaoRota, HashNum FROM  projetomercurio.sensor WHERE HashNum = '{0}'", hash);
+            MySqlDataReader result = connection.SendQuery(sql);
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    int sensor1;
+                    int idAnterior = 0;
+                    if (!Int32.TryParse(result["IdSensorAnterior"].ToString(), out idAnterior))
+                    {
+                        sensor1 = 0;
+                    }
+                    else
+                    {
+                        sensor1 = ((int)result["IdSensorAnterior"]);
+                    }
+
+                    Direcao direcao = new Direcao((int)result["IdDirecao"]);
+                    DirecaoRota rota = DirecaoRota.Ida;
+                    switch (result["DirecaoRota"].ToString())
+                    {
+                        case "Ida":
+                            rota = DirecaoRota.Ida;
+                            break;
+                        case "Volta":
+                            rota = DirecaoRota.Volta;
+                            break;
+
+                    }
+
+                    sensor = new Sensor((int)result["IdSensor"], result["Nome"].ToString(), (DateTime)result["DataCriacao"], (bool)result["Inicial"], sensor1, direcao, rota, result["HashNum"].ToString());
+                }
+
+
+
             }
             result.Close();
             return sensor;

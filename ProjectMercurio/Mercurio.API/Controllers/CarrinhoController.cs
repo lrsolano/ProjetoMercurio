@@ -7,34 +7,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mercurio.API.Controllers
+namespace Mercurio.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SensorController : Controller
+    public class CarrinhoController : Controller
     {
-        private readonly SensorConverter _converter;
+        private readonly CarrinhoConverter _converter;
         private readonly IConfiguration _config;
 
-        public SensorController(IConfiguration configuration)
+        public CarrinhoController(IConfiguration configuration)
         {
-            _converter = new SensorConverter();
+            _converter = new CarrinhoConverter();
             _config = configuration;
         }
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(List<SensorV>), 200)]
+        [ProducesResponseType(typeof(List<CarrinhoV>), 200)]
+        [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
         public IActionResult GetAll()
         {
+            try
+            {
+                return Ok(_converter.Parser(Carrinho.FindAll()));
+            }
+            catch (MercurioCoreException ex)
+            {
+                return StatusCode(400, new ErrorClass(400, ex.Message, DateTime.Now));
+            }
+            catch (DBConnectionException ex)
+            {
+                return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
+            }
 
-            return Ok(_converter.Parser(Sensor.FindAll()));
         }
 
         [HttpGet("{id}")]
-        [Authorize]
-        [ProducesResponseType(typeof(SensorV), 200)]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(CarrinhoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
+        [ProducesResponseType(typeof(ErrorClass), 500)]
         public IActionResult Get(long id)
         {
             try
@@ -43,12 +57,12 @@ namespace Mercurio.API.Controllers
                 {
                     return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
                 }
-                var sensor = _converter.Parser(Sensor.FindById(id));
-                if (sensor == null)
+                var item = _converter.Parser(Carrinho.FindById(id));
+                if (item == null)
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                return StatusCode(200, sensor);
+                return StatusCode(200, item);
             }
             catch (MercurioCoreException ex)
             {
@@ -60,23 +74,19 @@ namespace Mercurio.API.Controllers
             }
 
         }
-        [HttpPost("create")]
+
+        [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(SensorV), 200)]
-        [ProducesResponseType(typeof(ErrorClass), 404)]
+        [ProducesResponseType(typeof(CarrinhoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
-        public IActionResult CreateSensor([FromBody] SensorV sensorV)
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult CreateItem([FromBody] CarrinhoV item)
         {
             try
             {
-                Sensor sensor = _converter.Parser(sensorV);
-                if (sensor == null)
-                {
-                    return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
-                }
-                sensor.CreateSensor();
-
-                return StatusCode(200, _converter.Parser(sensor));
+                Carrinho i = _converter.Parser(item);
+                i.CreateCarrinho();
+                return Ok(_converter.Parser(i));
             }
             catch (MercurioCoreException ex)
             {
@@ -86,7 +96,6 @@ namespace Mercurio.API.Controllers
             {
                 return StatusCode(500, new ErrorClass(500, ex.Message, DateTime.Now));
             }
-
         }
 
         [HttpDelete("{id}")]
@@ -94,7 +103,8 @@ namespace Mercurio.API.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
-        public IActionResult DeleteSensor(long id)
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult DeleteItem(long id)
         {
             try
             {
@@ -102,12 +112,13 @@ namespace Mercurio.API.Controllers
                 {
                     return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
                 }
-                var sensor = Sensor.FindById(id);
-                if (sensor == null)
+                var item = (Carrinho.FindById(id));
+                if (item == null)
                 {
-                    return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
+                    return StatusCode(404, new ErrorClass(404, "Item não encontrado", DateTime.Now));
                 }
-                sensor.DeleteSensor();
+                item.DeleteCarrinho();
+
                 return NoContent();
             }
             catch (MercurioCoreException ex)
@@ -121,45 +132,44 @@ namespace Mercurio.API.Controllers
 
         }
 
-        [HttpPut("updateInfos/{idSensor}")]
-        [Authorize]
-        [ProducesResponseType(typeof(SensorV), 200)]
+        [HttpPut("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(CarrinhoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
-        public IActionResult UpdateInfos([FromBody] SensorV sensorV, long idSensor)
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult AtualizarCarrinho([FromBody] CarrinhoV carrinhoV, long id)
         {
             try
             {
-                Sensor sensor = Sensor.FindById(idSensor);
-                if (sensor == null || sensor.Id == 0)
+                PedidoConverter pedidoConverter = new PedidoConverter();
+                SensorConverter sensorConverter = new SensorConverter();
+                if (id <= 0)
+                {
+                    return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
+                }
+                var item = (Carrinho.FindById(id));
+                if (item == null)
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                bool needUpdate = false;
-                if(sensorV.Nome != sensor.Nome  & !string.IsNullOrEmpty(sensorV.Nome))
+                if (carrinhoV.Nome != "" || string.IsNullOrWhiteSpace(carrinhoV.Nome))
                 {
-                    sensor.ChangeName(sensorV.Nome);
-                    needUpdate = true;
+                    item.ChangeName(carrinhoV.Nome);
                 }
-                DirecaoConverter direcaoConverter = new DirecaoConverter();
-                if (!sensor.Direcao.Equals(direcaoConverter.Parser(sensorV.Direcao)))
+                if(carrinhoV.IdPedido != 0)
                 {
-                    sensor.ChangeDirecao(direcaoConverter.Parser(sensorV.Direcao));
-                    needUpdate = true;
-                }
-
-
-                if (needUpdate)
-                {
-                    sensor.UpdateSensor();
-                }
-                else
-                {
-                    return StatusCode(400, new ErrorClass(400, "Nenhuma mudança encontrada", DateTime.Now));
+                    item.ChangePedido(Pedido.FindById(carrinhoV.IdPedido));
                 }
                 
+                if(carrinhoV.IdUltimoSensor != 0)
+                {
+                    item.ChangeUltimoSensor(Sensor.FindById(carrinhoV.IdUltimoSensor));
+                }
+                
+                item.UpdateCarrinho();
 
-                return StatusCode(200, _converter.Parser(sensor));
+                return StatusCode(200, _converter.Parser(item));
             }
             catch (MercurioCoreException ex)
             {
@@ -171,25 +181,29 @@ namespace Mercurio.API.Controllers
             }
 
         }
-        [HttpGet("hash/{hash}")]
+
+        [HttpPut("finalizar/{id}")]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(SensorV), 200)]
+        [ProducesResponseType(typeof(CarrinhoV), 200)]
         [ProducesResponseType(typeof(ErrorClass), 404)]
         [ProducesResponseType(typeof(ErrorClass), 400)]
-        public IActionResult GetHash(string hash)
+        [ProducesResponseType(typeof(ErrorClass), 500)]
+        public IActionResult FinalizaCorrida(long id)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(hash))
+                if (id <= 0)
                 {
                     return StatusCode(400, new ErrorClass(400, "Codigo Invalido", DateTime.Now));
                 }
-                var sensor = _converter.Parser(Sensor.FindByHash(hash));
-                if (sensor == null)
+                var item = (Carrinho.FindById(id));
+                if (item == null)
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                return StatusCode(200, sensor);
+                item.FinalizarCorrida();
+
+                return StatusCode(200, _converter.Parser(Carrinho.FindById(id)));
             }
             catch (MercurioCoreException ex)
             {
@@ -202,4 +216,6 @@ namespace Mercurio.API.Controllers
 
         }
     }
+
+    
 }

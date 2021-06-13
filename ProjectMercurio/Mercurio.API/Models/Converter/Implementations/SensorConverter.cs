@@ -13,6 +13,7 @@ namespace Mercurio.API
             DirecaoConverter direcaoConverter = new DirecaoConverter();
             if (origin == null) return null;
             SensorV sensor = new SensorV(origin.Id,origin.Nome ,origin.Inicial, origin.SensorAnterior, direcaoConverter.Parser(origin.Direcao), origin.DirecaoRota);
+            sensor.Hash = origin.Hash;
             return sensor;
         }
         public Sensor Parser(SensorV origin)
@@ -22,7 +23,7 @@ namespace Mercurio.API
             Sensor sensor = Sensor.FindById(origin.Id);
             if (sensor == null)
             {
-                sensor = new Sensor(origin.Nome, origin.Inicial, origin.SensorAnterior, direcaoConverter.Parser(origin.Direcao), origin.DirecaoRota);
+                sensor = new Sensor(origin.Nome, origin.Inicial, origin.SensorAnterior, direcaoConverter.Parser(origin.Direcao), origin.DirecaoRota, sensor.Hash);
             }
             return sensor;
         }

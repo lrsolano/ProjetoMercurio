@@ -79,8 +79,9 @@ namespace Mercurio.Core
             List<Item> itens = new List<Item>();
             Usuario pedinte = null;
             Rota rota = null;
+            bool pedidoEntregue = false;
             DateTime dataPedido = new DateTime();
-            string sql = string.Format(@"SELECT IdUsuario, DataCriacao, IdRota
+            string sql = string.Format(@"SELECT IdUsuario, DataCriacao, IdRota, PedidoEntregue
                                         FROM projetomercurio.pedido p
                                         WHERE p.IdPedido={0} ", id);
             MySqlDataReader result = connection.SendQuery(sql);
@@ -90,6 +91,7 @@ namespace Mercurio.Core
                 pedinte = new Usuario((int)result["IdUsuario"]);
                 dataPedido = (DateTime)result["DataCriacao"];
                 rota = new Rota((int)result["IdRota"]);
+                pedidoEntregue = (bool)result["PedidoEntregue"];
                 result.Close();
 
             }
@@ -114,7 +116,7 @@ namespace Mercurio.Core
                 }
             }
             result2.Close();
-            Pedido pedido = new Pedido(Convert.ToInt32(id), pedinte, dataPedido, rota, itens);
+            Pedido pedido = new Pedido(Convert.ToInt32(id), pedinte, dataPedido, rota, itens, pedidoEntregue);
             return pedido;
         }
 

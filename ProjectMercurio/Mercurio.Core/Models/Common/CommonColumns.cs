@@ -32,7 +32,7 @@ namespace Mercurio.Core
         public bool Exists(long id)
         {
             string sql = string.Format("SELECT {0} FROM  projetomercurio.{1} WHERE {0}={2} ", _colunaId, _tabela, id);
-            Console.WriteLine(string.Format("SELECT EXIST => {0}",sql));
+            //Console.WriteLine(string.Format("SELECT EXIST => {0}",sql));
             MySqlDataReader result = _connection.SendQuery(sql);
             if (result.HasRows)
             {

@@ -67,6 +67,7 @@ CREATE TABLE pedido(
 	DataCriacao DATETIME NOT NULL,
 	IdRota INT NOT NULL,
 	Ativo BOOLEAN NOT NULL DEFAULT true,
+	PedidoEntregue BOOLEAN NOT NULL DEFAULT false,
 	FOREIGN KEY (IdUsuario) REFERENCES usuario(IdUsuario),
 	FOREIGN KEY (IdRota) REFERENCES rota(IdRota)
 );
@@ -91,6 +92,18 @@ CREATE TABLE GrupoXUsuario(
 	IdUsuario INT NOT NULL,
 	FOREIGN KEY (IdUsuario) REFERENCES usuario(IdUsuario),
 	FOREIGN KEY (IdGrupo) REFERENCES grupo(IdGrupo)
+);
+
+CREATE TABLE carrinho(
+	IdCarrinho INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	Nome VARCHAR (60) NOT NULL, 
+	IdPedido INT,
+	Disponivel BOOLEAN NOT NULL DEFAULT true,
+	IdUltimoSensor INT,
+	HashRota TEXT NOT NULL,
+	DataCriacao DATETIME NOT NULL,
+	FOREIGN KEY (IdUltimoSensor) REFERENCES sensor(IdSensor),
+	FOREIGN KEY (IdPedido) REFERENCES pedido(IdPedido)
 );
 
 

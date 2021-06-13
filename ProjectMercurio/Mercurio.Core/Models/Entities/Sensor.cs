@@ -13,9 +13,10 @@ namespace Mercurio.Core
         public int SensorAnterior { get; set; }
         public Direcao Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; private set; }
+        public string Hash { get; private set; }
         public bool Ativo { get; set; }
         private bool AtualizarTodas { get; set; }
-        internal Sensor(long id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        internal Sensor(long id, string nome, DateTime dataCriacao, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota, string hash) : base("sensor", "IdSensor")
         {
             Id = id;
             Nome = nome;
@@ -24,14 +25,16 @@ namespace Mercurio.Core
             SensorAnterior = sensorAnterior;
             Direcao = direcao;
             DirecaoRota = direcaoRota;
+            Hash = hash;
         }
-        public Sensor(string nome, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota) : base("sensor", "IdSensor")
+        public Sensor(string nome, bool inicial, int sensorAnterior, Direcao direcao, DirecaoRota direcaoRota, string hash) : base("sensor", "IdSensor")
         {
             Nome = nome;
             Inicial = inicial;
             SensorAnterior = sensorAnterior;
             Direcao = direcao;
             DirecaoRota = direcaoRota;
+            Hash = hash;
         }
         internal Sensor(int id) : base("sensor", "IdSensor")
         {
@@ -52,6 +55,12 @@ namespace Mercurio.Core
         {
             SensorManipulation item = new SensorManipulation();
             Sensor i = item.FindByName(nome);
+            return i;
+        }
+        public static Sensor FindByHash(string hash)
+        {
+            SensorManipulation item = new SensorManipulation();
+            Sensor i = item.FindByHash(hash);
             return i;
         }
         public static List<Sensor> FindAll()

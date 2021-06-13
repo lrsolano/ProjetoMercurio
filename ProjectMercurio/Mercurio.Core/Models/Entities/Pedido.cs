@@ -12,20 +12,23 @@ namespace Mercurio.Core
         public Rota Rota { get; private set; }
         public List<Item> Items { get; set; }
         public bool Ativo { get; set; }
-        internal Pedido(int id, Usuario usuario, DateTime dataCriacao, Rota rota, List<Item> items) : base("pedido", "IdPedido")
+        public bool PedidoEntregue { get; internal set; }
+        internal Pedido(int id, Usuario usuario, DateTime dataCriacao, Rota rota, List<Item> items, bool pedidoEntregue) : base("pedido", "IdPedido")
         {
             Id = id;
             Usuario = usuario;
             DataCriacao = dataCriacao;
             Rota = rota;
             Items = items;
+            PedidoEntregue = pedidoEntregue;
         }
-        internal Pedido(Usuario usuario, DateTime dataCriacao, Rota rota, List<Item> items) : base("pedido", "IdPedido")
+        internal Pedido(Usuario usuario, DateTime dataCriacao, Rota rota, List<Item> items, bool pedidoEntregue) : base("pedido", "IdPedido")
         {
             Usuario = usuario;
             DataCriacao = dataCriacao;
             Rota = rota;
             Items = items;
+            PedidoEntregue = pedidoEntregue;
         }
         public Pedido(Usuario usuario) : base("pedido", "IdPedido")
         {

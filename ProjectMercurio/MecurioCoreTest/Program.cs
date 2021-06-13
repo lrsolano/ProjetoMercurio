@@ -11,8 +11,8 @@ namespace MecurioCoreTest
         {
             try
             {
-                Sensor s = Sensor.FindById(7);
-                Console.WriteLine(s.DataCriacao);
+                Carrinho c = Carrinho.FindByName("Carrinho 1");
+                c.FinalizarCorrida();
 
             }
             catch(MercurioCoreException ex)

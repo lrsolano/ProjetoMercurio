@@ -14,6 +14,7 @@ namespace Mercurio.API
         public int SensorAnterior { get; set; }
         public DirecaoV Direcao { get; set; }
         public DirecaoRota DirecaoRota { get; set; }
+        public string Hash { get; set; }
 
         public SensorV(long id, string nome, bool inicial, int sensorAnterior, DirecaoV direcao, DirecaoRota direcaoRota)
         {
