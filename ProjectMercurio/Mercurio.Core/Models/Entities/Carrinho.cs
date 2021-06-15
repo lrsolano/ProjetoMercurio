@@ -112,10 +112,14 @@ namespace Mercurio.Core
             {
                 throw new MercurioCoreException("Sensor não criado no banco de dados");
             }
-            if (UltimoSensor.Equals(sensor))
+            if(UltimoSensor != null)
             {
-                throw new MercurioCoreException("Sensores iguais");
+                if (UltimoSensor.Equals(sensor))
+                {
+                    throw new MercurioCoreException("Sensores iguais");
+                }
             }
+            
             UltimoSensor = sensor;
         }
         public void FinalizarCorrida()

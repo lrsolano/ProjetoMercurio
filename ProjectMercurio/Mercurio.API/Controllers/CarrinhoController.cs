@@ -153,7 +153,8 @@ namespace Mercurio.API
                 {
                     return StatusCode(404, new ErrorClass(404, "Sensor não encontrado", DateTime.Now));
                 }
-                if (carrinhoV.Nome != "" || string.IsNullOrWhiteSpace(carrinhoV.Nome))
+
+                if (!string.IsNullOrWhiteSpace(carrinhoV.Nome))
                 {
                     item.ChangeName(carrinhoV.Nome);
                 }

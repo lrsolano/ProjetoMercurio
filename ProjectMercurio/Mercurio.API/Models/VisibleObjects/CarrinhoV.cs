@@ -7,11 +7,11 @@ namespace Mercurio.API
 {
     public class CarrinhoV
     {
-        public long Id { get; set; }
+        public long Id { get; internal set; }
         public string Nome { get; set; }
         public long IdPedido { get; set; }
-        public bool Disponivel { get; set; }
-        public long IdUltimoSensor { get; set; }
-        public string HashRota { get; set; }
+        public bool Disponivel { get; internal set; }
+        public long IdUltimoSensor { get; internal set; }
+        public string HashRota { get; internal set; }
     }
 }
