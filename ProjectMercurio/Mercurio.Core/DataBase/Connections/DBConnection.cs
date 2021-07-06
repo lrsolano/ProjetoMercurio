@@ -34,6 +34,7 @@ namespace Mercurio.Core
         private void Initialize()
         {
             server = "192.168.18.43";
+
             database = "projetomercurio";
             uid = "root";
             password = "1234";
